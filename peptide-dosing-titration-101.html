@@ -31,9 +31,9 @@
             <div class="max-w-3xl">
                 <div class="text-pink-600 text-xs font-bold tracking-[3px]">RESEARCH DOSING GUIDE</div>
                 <h1 class="font-display text-6xl font-semibold tracking-tighter text-zinc-900 mt-3">Peptide Dosing & Titration 101</h1>
-                <p class="mt-6 text-xl text-zinc-600">Evidence-based principles for calculating doses, understanding titration schedules, and conducting safe, effective research.</p>
+                <p class="mt-6 text-xl text-zinc-600">Measurement errors are the most common mistake in peptide research, and nearly all of them come from the same place: confusion between different types of “units.” This guide covers every syringe type used in peptide protocols, how to read them correctly, how the major unit systems relate to each other, and the conversion math that ties it all together.</p>
                 <div class="mt-6 flex items-center gap-x-4 text-sm text-zinc-500">
-                    <div>12 min read</div>
+                    <div>15 min read</div>
                     <div>•</div>
                     <div>Last updated February 2026</div>
                 </div>
@@ -44,93 +44,315 @@
     <div class="max-w-screen-xl mx-auto px-8 py-16">
         <div class="prose prose-zinc max-w-4xl mx-auto text-[15px] leading-relaxed">
             
-            <h2 class="font-display text-4xl font-semibold tracking-tight">What Is Titration?</h2>
-            <p>Titration is the process of gradually increasing (or sometimes decreasing) your dose over time to find the optimal balance between effectiveness and tolerability. Proper titration is one of the most important skills in peptide research — it minimizes side effects while maximizing research outcomes.</p>
-
-            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-8 mt-8">
-                <div class="font-bold text-amber-700 mb-3">Why Titration Matters</div>
-                <div class="text-sm text-amber-700">Starting at a full dose dramatically increases the risk of side effects. Gradual titration allows your system to adapt, reduces adverse reactions, and helps identify your personal optimal dose.</div>
+            <div class="disclaimer mb-12">
+                <strong>Important:</strong> All information on Paragon Peptides is for research and educational purposes only. This is not medical advice. Consult a qualified healthcare professional before making any decisions involving peptides.
             </div>
 
-            <h2 class="font-display text-4xl font-semibold tracking-tight mt-12">Core Titration Principles</h2>
+            <h2 class="font-display text-4xl font-semibold tracking-tight">Insulin Syringes: The Standard Tool</h2>
+            <p>Nearly all peptide protocols use insulin syringes. They are designed for small, precise volumes and have thin-gauge needles (typically 29G, 30G, or 31G) that are appropriate for subcutaneous injection. Insulin syringes are widely available, inexpensive, and come pre-attached with a fixed needle, which means less dead space (wasted liquid trapped in the hub) compared to syringes with detachable needles.</p>
             
-            <div class="space-y-6 mt-6">
-                <div class="border border-zinc-200 rounded-2xl p-6">
-                    <div class="font-bold">Start Low, Go Slow</div>
-                    <div class="text-sm text-zinc-600 mt-2">Begin at the lowest effective research dose. Increase only after confirming tolerance at the current level. Most protocols recommend 2–4 weeks between dose increases.</div>
-                </div>
-                <div class="border border-zinc-200 rounded-2xl p-6">
-                    <div class="font-bold">Listen to Your Body</div>
-                    <div class="text-sm text-zinc-600 mt-2">Side effects are signals. Mild nausea or fatigue may be acceptable during titration, but severe symptoms warrant pausing or reducing the dose. Never push through significant adverse effects.</div>
-                </div>
-                <div class="border border-zinc-200 rounded-2xl p-6">
-                    <div class="font-bold">Document Everything</div>
-                    <div class="text-sm text-zinc-600 mt-2">Keep a log of dose, timing, side effects, and research outcomes. This data is invaluable for adjusting your protocol and identifying patterns.</div>
-                </div>
-            </div>
+            <p class="mt-4">Insulin syringes are labeled by two characteristics: their total capacity (how much liquid they hold) and their unit scale (what the tick marks represent). Understanding the scale is where most confusion starts.</p>
 
-            <h2 class="font-display text-4xl font-semibold tracking-tight mt-12">Common Titration Schedules</h2>
+            <h2 class="font-display text-4xl font-semibold tracking-tight mt-12">Syringe Types and Scales</h2>
             
             <div class="mt-6">
-                <div class="font-bold text-lg mb-4">GLP-1 Agonists (Semaglutide, Tirzepatide, Retatrutide)</div>
-                <div class="overflow-x-auto">
+                <div class="font-bold text-lg mb-4">U-100 Syringes (1 mL)</div>
+                <div class="bg-zinc-50 border border-zinc-200 rounded-2xl p-6">
+                    <div class="text-sm">This is the most common syringe used in peptide research. A U-100 1 mL syringe has 100 unit markings along its barrel, where 100 units = 1 mL. Each single unit mark represents 0.01 mL of liquid.</div>
+                    <div class="mt-4 text-xs">
+                        <div><strong>Key specifications:</strong></div>
+                        <div class="mt-2">• Total capacity: 1 mL (100 units)</div>
+                        <div>• Smallest graduation: typically 2 units (every other line is marked)</div>
+                        <div>• Each unit = 0.01 mL</div>
+                        <div>• Best for: doses requiring 10 to 100 units of liquid (0.10 to 1.00 mL)</div>
+                    </div>
+                </div>
+                <div class="text-xs text-zinc-500 mt-2">This is the default syringe referenced in most of our dosage protocol pages and the syringe our <a href="peptide-calculator.html" class="text-pink-600 hover:underline">Dosage Calculator</a> outputs results for.</div>
+            </div>
+
+            <div class="mt-6">
+                <div class="font-bold text-lg mb-4">U-100 Syringes (0.5 mL)</div>
+                <div class="bg-zinc-50 border border-zinc-200 rounded-2xl p-6">
+                    <div class="text-sm">A half-milliliter version of the U-100 syringe. It still uses the same scale (100 units per mL), but only holds 50 units (0.5 mL). The advantage is that the markings are physically more spread out along the barrel, making small volumes easier to read accurately.</div>
+                    <div class="mt-4 text-xs">
+                        <div><strong>Key specifications:</strong></div>
+                        <div class="mt-2">• Total capacity: 0.5 mL (50 units)</div>
+                        <div>• Smallest graduation: typically 1 unit (every line is marked)</div>
+                        <div>• Each unit = 0.01 mL (same as the 1 mL version)</div>
+                        <div>• Best for: doses requiring 5 to 50 units of liquid (0.05 to 0.50 mL)</div>
+                    </div>
+                </div>
+                <div class="text-xs text-zinc-500 mt-2">If your protocol calls for doses under 30 units, the 0.5 mL syringe is often the better choice because you can read the markings more precisely.</div>
+            </div>
+
+            <div class="mt-6">
+                <div class="font-bold text-lg mb-4">U-100 Syringes (0.3 mL)</div>
+                <div class="bg-zinc-50 border border-zinc-200 rounded-2xl p-6">
+                    <div class="text-sm">The smallest common insulin syringe. Holds 30 units (0.3 mL) on the U-100 scale. The markings are very spread out, giving you the most precise visual reading for very small doses.</div>
+                    <div class="mt-4 text-xs">
+                        <div><strong>Key specifications:</strong></div>
+                        <div class="mt-2">• Total capacity: 0.3 mL (30 units)</div>
+                        <div>• Smallest graduation: 0.5 units (half-unit markings)</div>
+                        <div>• Each unit = 0.01 mL</div>
+                        <div>• Best for: doses requiring 1 to 30 units of liquid (0.01 to 0.30 mL)</div>
+                    </div>
+                </div>
+                <div class="text-xs text-zinc-500 mt-2">This syringe is ideal for protocols with very small injection volumes, such as high-concentration reconstitutions or peptides dosed in the low-microgram range.</div>
+            </div>
+
+            <div class="mt-6">
+                <div class="font-bold text-lg mb-4">U-50 Syringes</div>
+                <div class="bg-zinc-50 border border-zinc-200 rounded-2xl p-6">
+                    <div class="text-sm">Less common in the peptide space but worth understanding. A U-50 syringe has a different scale: 50 units = 0.5 mL. Each unit mark represents 0.01 mL, which is the same volume per unit as U-100. The only difference is the total capacity (50 units max) and the physical spacing of marks.</div>
+                    <div class="mt-4 text-xs">
+                        <div><strong>Key specifications:</strong></div>
+                        <div class="mt-2">• Total capacity: 0.5 mL (50 units)</div>
+                        <div>• Each unit = 0.01 mL</div>
+                        <div>• Markings are more spread out than a U-100 1 mL syringe</div>
+                    </div>
+                </div>
+                <div class="text-xs text-zinc-500 mt-2"><strong>Important note:</strong> Because U-50 and U-100 (0.5 mL) syringes both hold 0.5 mL and both have unit marks representing 0.01 mL, the volume drawn at any given unit marking is the same. The practical difference is labeling and graduation visibility. Some protocol pages may reference U-50 syringes, but the volume math is identical to U-100.</div>
+            </div>
+
+            <div class="mt-6">
+                <div class="font-bold text-lg mb-4">U-20 Syringes</div>
+                <div class="bg-zinc-50 border border-zinc-200 rounded-2xl p-6">
+                    <div class="text-sm">Used primarily in veterinary contexts but occasionally referenced in peptide research for ultra-small doses. A U-20 syringe has 20 units = 0.2 mL, with each unit representing 0.01 mL.</div>
+                    <div class="mt-4 text-xs">
+                        <div><strong>Key specifications:</strong></div>
+                        <div class="mt-2">• Total capacity: 0.2 mL (20 units)</div>
+                        <div>• Each unit = 0.01 mL</div>
+                        <div>• Widest spacing between marks, easiest to read for tiny volumes</div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="font-display text-4xl font-semibold tracking-tight mt-12">How to Read a Syringe</h2>
+            
+            <div class="mt-6 space-y-6">
+                <div class="flex gap-4">
+                    <div class="w-8 h-8 flex-shrink-0 bg-pink-600 text-white rounded-2xl flex items-center justify-center font-bold">1</div>
+                    <div><strong>Identify the syringe type</strong> — Check the packaging or the barrel print. It will say “U-100,” “U-50,” or “U-20” and indicate the total capacity (1 mL, 0.5 mL, or 0.3 mL). If it says “U-100” and “1 cc” (cc is the same as mL), you have the most common type.</div>
+                </div>
+                <div class="flex gap-4">
+                    <div class="w-8 h-8 flex-shrink-0 bg-pink-600 text-white rounded-2xl flex items-center justify-center font-bold">2</div>
+                    <div><strong>Understand what the lines mean</strong> — On a U-100 syringe, the numbered markings typically appear at every 10 units (10, 20, 30, etc.), with shorter unnumbered lines in between. On a 1 mL syringe, the lines between numbers usually represent 2-unit increments. On 0.5 mL and 0.3 mL syringes, the lines are typically single-unit increments, and 0.3 mL syringes often include half-unit marks.</div>
+                </div>
+                <div class="flex gap-4">
+                    <div class="w-8 h-8 flex-shrink-0 bg-pink-600 text-white rounded-2xl flex items-center justify-center font-bold">3</div>
+                    <div><strong>Read at the plunger tip</strong> — When you draw liquid, read the measurement at the top edge of the plunger’s rubber stopper (the flat end closest to the needle). The rubber stopper has a slightly domed shape. Read at the top flat edge, not the bottom curve. Hold the syringe at eye level for an accurate reading.</div>
+                </div>
+                <div class="flex gap-4">
+                    <div class="w-8 h-8 flex-shrink-0 bg-pink-600 text-white rounded-2xl flex items-center justify-center font-bold">4</div>
+                    <div><strong>Account for air bubbles</strong> — Air bubbles in the barrel displace liquid and make your reading inaccurate. After drawing your dose, hold the syringe with the needle pointing up, flick the barrel gently to move bubbles to the top, then push the plunger slightly to expel the air. Re-draw if needed to reach the correct volume.</div>
+                </div>
+            </div>
+
+            <h2 class="font-display text-4xl font-semibold tracking-tight mt-12">The Three Unit Systems</h2>
+            <p>This is where most beginners get confused. There are three completely different measurement systems used in peptide protocols, and they measure different things:</p>
+            
+            <div class="mt-6">
+                <div class="font-bold text-lg mb-4">1. Weight: mg and mcg</div>
+                <div class="bg-zinc-50 border border-zinc-200 rounded-2xl p-6">
+                    <div class="text-sm">Milligrams (mg) and micrograms (mcg) measure how much peptide by mass. This is what the vial label shows (e.g., “BPC-157 5mg”) and what your target dose is expressed in (e.g., “250 mcg per injection”).</div>
+                    <div class="mt-4 text-xs font-mono">
+                        • 1 mg = 1,000 mcg<br>
+                        • 1 g = 1,000 mg = 1,000,000 mcg<br>
+                        • Micrograms are sometimes written as “µg” (the Greek letter mu)
+                    </div>
+                    <div class="mt-4 text-xs text-red-600"><strong>Critical rule:</strong> Always confirm whether a protocol specifies mg or mcg. Confusing the two creates a 1,000-fold dosing error. A protocol calling for 250 mcg is not the same as 250 mg.</div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <div class="font-bold text-lg mb-4">2. Volume: mL and syringe units</div>
+                <div class="bg-zinc-50 border border-zinc-200 rounded-2xl p-6">
+                    <div class="text-sm">Milliliters (mL) and syringe units measure how much liquid you draw. These tell you nothing about the peptide content until you know the concentration.</div>
+                    <div class="mt-4 text-xs font-mono">
+                        • 1 mL = 100 units on a U-100 syringe<br>
+                        • 1 unit = 0.01 mL on a U-100 syringe<br>
+                        • mL and cc (cubic centimeters) are the same thing: 1 mL = 1 cc
+                    </div>
+                    <div class="mt-4 text-xs text-amber-600">Syringe “units” are purely volume marks. They are not International Units and they are not a measurement of peptide dose. Twenty units on a syringe means 0.20 mL of liquid, regardless of what peptide is dissolved in that liquid or at what concentration.</div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <div class="font-bold text-lg mb-4">3. Potency: International Units (IU)</div>
+                <div class="bg-zinc-50 border border-zinc-200 rounded-2xl p-6">
+                    <div class="text-sm">International Units measure biological activity for specific peptides where potency has been standardized through bioassay. The two peptides where IU is commonly used are:</div>
+                    <div class="mt-4 text-xs">
+                        • <strong>HGH (somatropin / HGH 191AA):</strong> approximately 3 IU per 1 mg<br>
+                        • <strong>HCG (human chorionic gonadotropin):</strong> IU defined by bioassay, not a simple weight conversion. Vials are labeled by total IU (e.g., 5,000 IU).
+                    </div>
+                    <div class="mt-4 text-xs text-zinc-500">Most peptides do not use IU. If your protocol is for BPC-157, semaglutide, Ipamorelin, TB-500, or most other peptides, you are working with mg/mcg only and IU does not apply.</div>
+                    <div class="mt-4 text-xs text-red-600"><strong>The critical distinction:</strong> When a protocol says “inject 2 IU of HGH,” it is specifying a potency amount, not a syringe marking. You must calculate the volume based on your reconstitution concentration to determine how many syringe units to draw. See the conversion section below.</div>
+                </div>
+            </div>
+
+            <h2 class="font-display text-4xl font-semibold tracking-tight mt-12">Conversion Math</h2>
+            <p>Every dosing calculation follows the same three-step process. Once you understand this formula, it works for every peptide, every vial size, and every syringe type.</p>
+            
+            <div class="mt-6 bg-zinc-900 text-white rounded-2xl p-8 font-mono text-sm">
+                <div class="text-pink-400">Step 1: Calculate concentration</div>
+                <div class="mt-2">Concentration = Total peptide in vial ÷ BAC water added</div>
+                <div class="mt-1 text-zinc-400">Example: 5 mg peptide + 2 mL BAC water = 2.5 mg/mL</div>
+                
+                <div class="mt-6 text-pink-400">Step 2: Calculate dose volume</div>
+                <div class="mt-2">Dose volume (mL) = Target dose ÷ Concentration</div>
+                <div class="mt-1 text-zinc-400">Example: 0.25 mg dose ÷ 2.5 mg/mL = 0.10 mL</div>
+                
+                <div class="mt-6 text-pink-400">Step 3: Convert to syringe units</div>
+                <div class="mt-2">Syringe units = Dose volume (mL) × 100 (for U-100)</div>
+                <div class="mt-1 text-zinc-400">Example: 0.10 mL × 100 = 10 units</div>
+            </div>
+            
+            <div class="mt-4 text-sm text-zinc-600">That’s it. Three steps for every peptide. Our <a href="peptide-calculator.html" class="text-pink-600 hover:underline">Dosage Calculator</a> automates all three and gives you the syringe units instantly.</div>
+
+            <h2 class="font-display text-4xl font-semibold tracking-tight mt-12">Quick-Reference Conversion Tables</h2>
+            
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <div class="font-bold mb-3">mg to mcg</div>
                     <table class="w-full text-sm border border-zinc-200 rounded-2xl">
-                        <thead class="bg-zinc-100">
-                            <tr>
-                                <th class="px-6 py-4 text-left">Week</th>
-                                <th class="px-6 py-4 text-left">Semaglutide</th>
-                                <th class="px-6 py-4 text-left">Tirzepatide</th>
-                                <th class="px-6 py-4 text-left">Retatrutide</th>
-                            </tr>
-                        </thead>
+                        <thead class="bg-zinc-100"><tr><th class="px-4 py-3 text-left">mg</th><th class="px-4 py-3 text-left">mcg</th></tr></thead>
                         <tbody class="divide-y divide-zinc-100">
-                            <tr><td class="px-6 py-4">1–4</td><td class="px-6 py-4 font-mono">0.25 mg</td><td class="px-6 py-4 font-mono">2.5 mg</td><td class="px-6 py-4 font-mono">2 mg</td></tr>
-                            <tr><td class="px-6 py-4">5–8</td><td class="px-6 py-4 font-mono">0.5 mg</td><td class="px-6 py-4 font-mono">5 mg</td><td class="px-6 py-4 font-mono">4 mg</td></tr>
-                            <tr><td class="px-6 py-4">9–12</td><td class="px-6 py-4 font-mono">1.0 mg</td><td class="px-6 py-4 font-mono">7.5–10 mg</td><td class="px-6 py-4 font-mono">8 mg</td></tr>
-                            <tr><td class="px-6 py-4">13–16</td><td class="px-6 py-4 font-mono">1.5–2.0 mg</td><td class="px-6 py-4 font-mono">10–15 mg</td><td class="px-6 py-4 font-mono">12 mg</td></tr>
+                            <tr><td class="px-4 py-2">0.1 mg</td><td class="px-4 py-2">100 mcg</td></tr>
+                            <tr><td class="px-4 py-2">0.25 mg</td><td class="px-4 py-2">250 mcg</td></tr>
+                            <tr><td class="px-4 py-2">0.5 mg</td><td class="px-4 py-2">500 mcg</td></tr>
+                            <tr><td class="px-4 py-2">1 mg</td><td class="px-4 py-2">1,000 mcg</td></tr>
+                            <tr><td class="px-4 py-2">2 mg</td><td class="px-4 py-2">2,000 mcg</td></tr>
+                            <tr><td class="px-4 py-2">5 mg</td><td class="px-4 py-2">5,000 mcg</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <div class="font-bold mb-3">mL to syringe units (U-100)</div>
+                    <table class="w-full text-sm border border-zinc-200 rounded-2xl">
+                        <thead class="bg-zinc-100"><tr><th class="px-4 py-3 text-left">mL</th><th class="px-4 py-3 text-left">U-100 syringe units</th></tr></thead>
+                        <tbody class="divide-y divide-zinc-100">
+                            <tr><td class="px-4 py-2">0.01 mL</td><td class="px-4 py-2">1 unit</td></tr>
+                            <tr><td class="px-4 py-2">0.05 mL</td><td class="px-4 py-2">5 units</td></tr>
+                            <tr><td class="px-4 py-2">0.10 mL</td><td class="px-4 py-2">10 units</td></tr>
+                            <tr><td class="px-4 py-2">0.20 mL</td><td class="px-4 py-2">20 units</td></tr>
+                            <tr><td class="px-4 py-2">0.25 mL</td><td class="px-4 py-2">25 units</td></tr>
+                            <tr><td class="px-4 py-2">0.50 mL</td><td class="px-4 py-2">50 units</td></tr>
+                            <tr><td class="px-4 py-2">1.00 mL</td><td class="px-4 py-2">100 units</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div class="mt-8">
-                <div class="font-bold text-lg mb-4">Growth Hormone Secretagogues (Ipamorelin, CJC-1295, Tesamorelin)</div>
-                <div class="bg-zinc-50 border border-zinc-200 rounded-2xl p-6 text-sm">
-                    <div>These peptides typically do not require formal titration. Start at the full research dose from day one:</div>
-                    <div class="mt-3 font-mono text-xs">Ipamorelin: 200–300 mcg 1–3x daily</div>
-                    <div class="font-mono text-xs">CJC-1295: 100–200 mcg 1–2x daily</div>
-                    <div class="font-mono text-xs">Tesamorelin: 1–2 mg daily</div>
-                </div>
-            </div>
-
-            <h2 class="font-display text-4xl font-semibold tracking-tight mt-12">Monitoring During Titration</h2>
             <div class="mt-6">
-                <div class="font-bold mb-3">Track These Weekly:</div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div>• Body weight and measurements</div>
-                    <div>• Energy levels and sleep quality</div>
-                    <div>• Appetite and food intake</div>
-                    <div>• Gastrointestinal symptoms</div>
-                    <div>• Injection site reactions</div>
-                    <div>• Mood and cognitive function</div>
+                <div class="font-bold mb-3">HGH: IU to mg to syringe units</div>
+                <table class="w-full text-sm border border-zinc-200 rounded-2xl">
+                    <thead class="bg-zinc-100"><tr><th class="px-4 py-3 text-left">IU</th><th class="px-4 py-3 text-left">mg (approx.)</th><th class="px-4 py-3 text-left">Syringe units (10 IU vial + 1 mL BAC)</th></tr></thead>
+                    <tbody class="divide-y divide-zinc-100">
+                        <tr><td class="px-4 py-2">1 IU</td><td class="px-4 py-2">0.33 mg</td><td class="px-4 py-2">10 units</td></tr>
+                        <tr><td class="px-4 py-2">2 IU</td><td class="px-4 py-2">0.67 mg</td><td class="px-4 py-2">20 units</td></tr>
+                        <tr><td class="px-4 py-2">3 IU</td><td class="px-4 py-2">1.00 mg</td><td class="px-4 py-2">30 units</td></tr>
+                        <tr><td class="px-4 py-2">4 IU</td><td class="px-4 py-2">1.33 mg</td><td class="px-4 py-2">40 units</td></tr>
+                        <tr><td class="px-4 py-2">5 IU</td><td class="px-4 py-2">1.67 mg</td><td class="px-4 py-2">50 units</td></tr>
+                        <tr><td class="px-4 py-2">10 IU</td><td class="px-4 py-2">3.33 mg</td><td class="px-4 py-2">100 units (full syringe)</td></tr>
+                    </tbody>
+                </table>
+                <div class="text-xs text-zinc-500 mt-2">Note: The syringe unit column above assumes a 10 IU vial reconstituted with 1 mL of BAC water. Different BAC water volumes produce different syringe readings. Use our <a href="peptide-calculator.html" class="text-pink-600 hover:underline">Dosage Calculator</a> to compute exact values for your specific reconstitution.</div>
+            </div>
+
+            <h2 class="font-display text-4xl font-semibold tracking-tight mt-12">Common Mistakes</h2>
+            
+            <div class="space-y-4 mt-6">
+                <div class="flex gap-4 p-4 bg-red-50 border border-red-100 rounded-2xl">
+                    <div class="text-red-500"><i class="fas fa-times-circle"></i></div>
+                    <div class="text-sm"><strong>Confusing syringe “units” with International Units (IU)</strong> — This is the single most dangerous measurement error. A protocol that says “inject 2 IU of HGH” does not mean draw to the “2” mark on your syringe. You must calculate the volume based on concentration. If your 10 IU vial was reconstituted with 1 mL of BAC water, then 2 IU = 20 syringe units (0.20 mL). If you reconstituted with 2 mL, then 2 IU = 40 syringe units (0.40 mL). Same IU dose, different syringe readings.</div>
+                </div>
+                <div class="flex gap-4 p-4 bg-red-50 border border-red-100 rounded-2xl">
+                    <div class="text-red-500"><i class="fas fa-times-circle"></i></div>
+                    <div class="text-sm"><strong>Confusing mg and mcg</strong> — If a protocol calls for 250 mcg and you measure 250 mg, you have dosed 1,000 times more than intended. Always double-check the unit abbreviation. When in doubt, convert: 250 mcg = 0.25 mg.</div>
+                </div>
+                <div class="flex gap-4 p-4 bg-red-50 border border-red-100 rounded-2xl">
+                    <div class="text-red-500"><i class="fas fa-times-circle"></i></div>
+                    <div class="text-sm"><strong>Reading the wrong part of the plunger</strong> — The rubber plunger tip is slightly dome-shaped. Read at the top flat edge of the rubber, not the bottom curve. Reading at the wrong point introduces a 1 to 2 unit error on every draw, which compounds over time.</div>
+                </div>
+                <div class="flex gap-4 p-4 bg-red-50 border border-red-100 rounded-2xl">
+                    <div class="text-red-500"><i class="fas fa-times-circle"></i></div>
+                    <div class="text-sm"><strong>Not accounting for air bubbles</strong> — A 5-unit air bubble in a 15-unit draw means you have only 10 units of actual liquid. Always expel air bubbles before finalizing your measurement. Hold the syringe needle-up, flick, push air out, and re-draw to the correct line.</div>
+                </div>
+                <div class="flex gap-4 p-4 bg-red-50 border border-red-100 rounded-2xl">
+                    <div class="text-red-500"><i class="fas fa-times-circle"></i></div>
+                    <div class="text-sm"><strong>Using the wrong syringe for the dose volume</strong> — If your dose is 5 units, trying to read that on a 1 mL (100 unit) syringe is nearly impossible to do accurately because the marks are so close together. Switch to a 0.5 mL or 0.3 mL syringe where the markings are more spread out. Conversely, if your dose is 80 units, a 0.5 mL syringe cannot hold it. Match the syringe to the dose volume.</div>
+                </div>
+                <div class="flex gap-4 p-4 bg-red-50 border border-red-100 rounded-2xl">
+                    <div class="text-red-500"><i class="fas fa-times-circle"></i></div>
+                    <div class="text-sm"><strong>Assuming all syringes have the same scale</strong> — While most insulin syringes used in peptide research are U-100 (where each unit = 0.01 mL), other scales exist. A syringe designed for U-40 insulin (used in some veterinary contexts) has a completely different relationship between unit marks and volume. Always verify the syringe scale before drawing a dose. The scale is printed on the barrel and on the packaging.</div>
                 </div>
             </div>
 
-            <h2 class="font-display text-4xl font-semibold tracking-tight mt-12">When to Pause or Reduce Dose</h2>
-            <div class="bg-red-50 border border-red-200 rounded-2xl p-8 mt-6">
-                <div class="font-bold text-red-700 mb-3">Pause or reduce if you experience:</div>
-                <div class="text-sm text-red-700">• Severe or persistent nausea/vomiting<br>• Significant fatigue that impairs daily function<br>• Injection site reactions that worsen or spread<br>• Signs of allergic reaction (rash, swelling, difficulty breathing)<br>• Unexplained rapid heart rate or blood pressure changes</div>
+            <h2 class="font-display text-4xl font-semibold tracking-tight mt-12">Needle Gauge and Length</h2>
+            <p>Insulin syringes come with needles in several gauges (thicknesses) and lengths. For peptide research via subcutaneous injection:</p>
+            
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <div class="font-bold mb-3">Gauge (thickness)</div>
+                    <div class="text-sm text-zinc-600">• <strong>29G:</strong> Standard. Slightly thicker, easier to draw viscous solutions. Good all-around choice.<br>• <strong>30G:</strong> Thinner than 29G. Slightly less tissue disruption. Most popular for peptide use.<br>• <strong>31G:</strong> Thinnest common option. Least discomfort but can be slow to draw thicker solutions.</div>
+                    <div class="mt-2 text-xs text-zinc-500">Higher gauge numbers mean thinner needles. For subcutaneous peptide injection, any gauge between 29G and 31G works well. The difference in comfort is minimal between them.</div>
+                </div>
+                <div>
+                    <div class="font-bold mb-3">Length</div>
+                    <div class="text-sm text-zinc-600">• <strong>1/2 inch (12.7 mm):</strong> The most common length for subcutaneous injection. Appropriate for most body types and injection sites.<br>• <strong>5/16 inch (8 mm):</strong> Shorter option. Preferred by some for leaner body types or shallow SubQ injection.</div>
+                    <div class="mt-2 text-xs text-zinc-500">For subcutaneous injection into the lower abdomen, thigh, or upper arm, both lengths are effective. The standard recommendation in most protocols is 30G x 1/2 inch.</div>
+                </div>
             </div>
+
+            <h2 class="font-display text-4xl font-semibold tracking-tight mt-12">Which Syringe Should I Use?</h2>
+            <p>Match your syringe to your dose volume for the most accurate measurement:</p>
+            
+            <table class="w-full text-sm border border-zinc-200 rounded-2xl mt-6">
+                <thead class="bg-zinc-100"><tr><th class="px-6 py-4 text-left">Dose volume</th><th class="px-6 py-4 text-left">Recommended syringe</th><th class="px-6 py-4 text-left">Why</th></tr></thead>
+                <tbody class="divide-y divide-zinc-100">
+                    <tr><td class="px-6 py-4">1 to 30 units</td><td class="px-6 py-4">U-100, 0.3 mL</td><td class="px-6 py-4">Half-unit graduations, easiest to read small volumes precisely</td></tr>
+                    <tr><td class="px-6 py-4">5 to 50 units</td><td class="px-6 py-4">U-100, 0.5 mL</td><td class="px-6 py-4">Single-unit graduations, good balance of precision and capacity</td></tr>
+                    <tr><td class="px-6 py-4">10 to 100 units</td><td class="px-6 py-4">U-100, 1 mL</td><td class="px-6 py-4">Full capacity for larger volumes, standard for reconstitution</td></tr>
+                </tbody>
+            </table>
+            
+            <div class="mt-4 text-sm text-zinc-600">For reconstitution (adding BAC water to the vial), use a 1 mL syringe since you typically add 1 to 3 mL of water. For daily dosing, use the smallest syringe that can hold your dose volume for the best readability.</div>
+
+            <h2 class="font-display text-4xl font-semibold tracking-tight mt-12">Measurement Checklist</h2>
+            <div class="bg-zinc-50 border border-zinc-200 rounded-2xl p-8 mt-6">
+                <div class="font-bold mb-4">Use this checklist every time you draw a dose until the process becomes second nature:</div>
+                <ol class="list-decimal pl-6 space-y-2 text-sm">
+                    <li>Confirm the protocol dose and verify whether it is in mg or mcg (or IU for HGH/HCG).</li>
+                    <li>Check your reconstitution concentration (total peptide / BAC water volume).</li>
+                    <li>Calculate the dose volume in mL (target dose / concentration).</li>
+                    <li>Convert mL to syringe units (mL x 100 for U-100).</li>
+                    <li>Select the appropriate syringe size for that dose volume.</li>
+                    <li>Verify the syringe is U-100 by checking the barrel or packaging.</li>
+                    <li>Draw the liquid and check for air bubbles.</li>
+                    <li>Read at the top flat edge of the plunger rubber, at eye level.</li>
+                    <li>Confirm the reading matches your calculated syringe units before proceeding.</li>
+                </ol>
+            </div>
+
+            <h2 class="font-display text-4xl font-semibold tracking-tight mt-12">Related Resources</h2>
+            <ul class="list-disc pl-6 mt-4 space-y-2 text-sm">
+                <li><a href="peptide-calculator.html" class="text-pink-600 hover:underline">Dosage Calculator</a> – Computes syringe units for any peptide, vial size, and BAC water amount.</li>
+                <li><a href="how-to-reconstitute-peptides-safely.html" class="text-pink-600 hover:underline">How to Reconstitute Peptides</a> – Step-by-step reconstitution with worked examples.</li>
+                <li><a href="index.html" class="text-pink-600 hover:underline">Peptide Storage Guide</a> – Before and after reconstitution storage requirements.</li>
+                <li><a href="beginners-guide-to-peptide-research.html" class="text-pink-600 hover:underline">Beginner’s Guide to Peptides</a> – Comprehensive starting point for newcomers.</li>
+                <li><a href="index.html" class="text-pink-600 hover:underline">Glossary</a> – Definitions for all measurement and peptide terminology.</li>
+                <li><a href="index.html" class="text-pink-600 hover:underline">FAQ</a> – Common questions about syringes, units, and dosing.</li>
+            </ul>
 
             <div class="disclaimer mt-12">
-                <strong>Important:</strong> Titration schedules are general guidelines. Individual responses vary significantly. Always prioritize safety over speed. Consult research protocols and adjust based on your specific research parameters.
+                <strong>Educational disclaimer:</strong> This guide is for research and educational purposes only. It is not medical advice, diagnosis, or treatment guidance. Always consult qualified healthcare professionals for medical decisions.
             </div>
         </div>
     </div>
 
     <footer class="bg-white border-t border-zinc-100">
         <div class="max-w-screen-xl mx-auto px-8 py-12 text-xs text-zinc-500">
-            © 2026 Paragon Peptides • For research use only • Not for human consumption
+            © 2026 Paragon Peptides • For research and educational purposes only • Not for human consumption
         </div>
     </footer>
 </body>
