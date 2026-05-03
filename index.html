@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peptide Information Center | Paragon Peptides</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .peptide-card {
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .peptide-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .modal {
+            animation: modalPop 0.2s ease-out forwards;
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .nav-active {
+            color: #ff1493;
+            font-weight: 600;
+        }
+
+        .section-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .resource-card {
+            transition: all 0.2s ease;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
+        }
+
+        .peptide-tag {
+            font-size: 0.65rem;
+            padding: 0.1rem 0.55rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            letter-spacing: -.5px;
+        }
+
+        .search-input {
+            transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+            box-shadow: 0 0 0 3px rgba(255, 20, 147, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-zinc-50">
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-zinc-100 sticky top-0 z-50">
+        <div class="max-w-screen-2xl mx-auto">
+            <div class="px-8 py-5 flex items-center justify-between">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-9 h-9 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center shadow-sm">
+                        <span class="text-white font-bold text-xl">P</span>
+                    </div>
+                    <div>
+                        <span class="font-display text-2xl font-semibold tracking-tighter">Paragon</span>
+                        <span class="font-display text-2xl font-semibold tracking-tighter text-pink-600">Peptides</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <!-- Peptides Dropdown -->
+                    <div class="relative group">
+                        <button class="flex items-center gap-x-1 text-zinc-600 hover:text-zinc-900 transition-colors">
+                            Peptides <i class="fas fa-chevron-down text-xs ml-1"></i>
+                        </button>
+                        <div class="absolute top-full left-0 mt-2 w-64 bg-white border border-zinc-200 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 py-2 text-sm max-h-[400px] overflow-y-auto">
+                            <a href="retatrutide-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Retatrutide</a>
+                            <a href="tirzepatide-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Tirzepatide</a>
+                            <a href="bpc-157-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">BPC-157</a>
+                            <a href="ghk-cu-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">GHK-Cu</a>
+                            <a href="tb-500-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">TB-500</a>
+                            <a href="glow-blend-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Glow Blend</a>
+                            <a href="semax-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Semax</a>
+                            <a href="selank-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Selank</a>
+                            <a href="cerebrolysin-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Cerebrolysin</a>
+                            <a href="aod-9604-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">AOD-9604</a>
+                            <a href="ipamorelin-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Ipamorelin</a>
+                            <a href="tesamorelin-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Tesamorelin</a>
+                            <a href="melanotan-ii-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Melanotan II</a>
+                            <a href="pt-141-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">PT-141</a>
+                            <a href="kisspeptin-10-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Kisspeptin-10</a>
+                        </div>
+                    </div>
+
+                    <!-- Stacks Dropdown -->
+                    <div class="relative group">
+                        <button class="flex items-center gap-x-1 text-zinc-600 hover:text-zinc-900 transition-colors">
+                            Stacks <i class="fas fa-chevron-down text-xs ml-1"></i>
+                        </button>
+                        <div class="absolute top-full left-0 mt-2 w-72 bg-white border border-zinc-200 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 py-2 text-sm">
+                            <div class="px-4 py-1 text-xs font-bold text-zinc-400">POPULAR COMBINATIONS</div>
+                            <a href="fat-loss-stack.html" class="block px-4 py-2 hover:bg-zinc-50">Fat Loss Stack (Retatrutide + AOD-9604)</a>
+                            <a href="healing-stack.html" class="block px-4 py-2 hover:bg-zinc-50">Healing Stack (BPC-157 + TB-500)</a>
+                            <a href="anti-aging-stack.html" class="block px-4 py-2 hover:bg-zinc-50">Anti-Aging Stack (GHK-Cu + Ipamorelin)</a>
+                            <a href="cognitive-stack.html" class="block px-4 py-2 hover:bg-zinc-50">Cognitive Stack (Semax + Selank)</a>
+                            <a href="recovery-stack.html" class="block px-4 py-2 hover:bg-zinc-50">Recovery Stack (Ipamorelin + TB-500)</a>
+                            <a href="metabolic-stack.html" class="block px-4 py-2 hover:bg-zinc-50">Metabolic Stack (Tesamorelin + Retatrutide)</a>
+                        </div>
+                    </div>
+
+                    <a href="peptide-calculator.html" class="text-zinc-600 hover:text-zinc-900 transition-colors">Calculator</a>
+                    <a href="#" class="text-zinc-600 hover:text-zinc-900 transition-colors">Resources</a>
+                </div>
+                
+                <div class="flex items-center gap-x-3">
+                    <button onclick="showCompareModal()"
+                            class="px-5 py-2.5 text-sm font-semibold rounded-2xl border border-zinc-200 hover:bg-zinc-50 transition-all flex items-center gap-x-2 text-zinc-700">
+                        <i class="fas fa-balance-scale text-pink-500"></i>
+                        <span class="hidden sm:inline">Compare</span>
+                    </button>
+                    
+                    <a href="peptide-calculator.html" 
+                       class="px-5 py-2.5 text-sm font-semibold rounded-2xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                        <span>Launch Calculator</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="bg-white border-b border-zinc-100">
+        <div class="max-w-screen-2xl mx-auto px-8 py-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Left: Text Content -->
+                <div class="max-w-xl">
+                    <div class="flex items-center gap-x-3 mb-4">
+                        <div class="px-3.5 py-1 bg-pink-100 text-pink-700 text-xs font-bold rounded-full flex items-center gap-x-1.5">
+                            <i class="fas fa-flask"></i>
+                            <span>RESEARCH USE ONLY</span>
+                        </div>
+                        <div class="text-xs text-zinc-500 font-medium">15 PEPTIDES • 2026 UPDATED</div>
+                    </div>
+                    
+                    <h1 class="text-6xl font-display font-semibold tracking-tighter text-zinc-900 leading-none">The Complete<br>Peptide Research Hub</h1>
+                    <p class="mt-6 text-xl text-zinc-600">Precision dosing protocols, reconstitution guides, and peer-reviewed research summaries for 15 research peptides.</p>
+                    
+                    <div class="mt-8 flex items-center gap-x-4">
+                        <a href="catalog.html" 
+                           class="px-8 py-3.5 text-base font-semibold rounded-3xl bg-pink-600 text-white hover:bg-pink-700 transition-all flex items-center gap-x-3 shadow-sm">
+                            <span>Browse All Peptides</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        
+                        <button onclick="showCompareModal()" 
+                                class="px-6 py-3.5 text-base font-semibold rounded-3xl border border-zinc-300 hover:bg-zinc-50 transition-all flex items-center gap-x-2 text-zinc-700">
+                            <i class="fas fa-balance-scale"></i>
+                            <span>Compare Peptides</span>
+                        </button>
+                    </div>
+                    
+                    <div class="mt-6 flex items-center gap-x-6 text-xs text-zinc-500">
+                        <div class="flex items-center gap-x-1.5">
+                            <i class="fas fa-check-circle text-emerald-500"></i>
+                            <span>Peer-reviewed sources</span>
+                        </div>
+                        <div class="flex items-center gap-x-1.5">
+                            <i class="fas fa-check-circle text-emerald-500"></i>
+                            <span>Updated February 2026</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Animated Video -->
+                <div class="relative">
+                    <div class="rounded-3xl overflow-hidden shadow-2xl border border-zinc-100">
+                        <video 
+                            autoplay 
+                            loop 
+                            muted 
+                            playsinline
+                            class="w-full h-auto object-cover"
+                            style="max-height: 520px;"
+                        >
+                            <source src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/hero-animated-vial.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    
+                    <!-- Subtle glow effect -->
+                    <div class="absolute -inset-4 bg-gradient-to-r from-pink-500/10 to-purple-500/10 rounded-[3rem] -z-10 blur-2xl"></div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- FEATURED PEPTIDES - Animated Feature Cards (modeled after peptidedosages.com) -->
+    <div class="max-w-screen-2xl mx-auto px-8 py-16 bg-white border-b border-zinc-100">
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center gap-x-2 px-4 py-1 bg-pink-100 text-pink-700 rounded-full text-xs font-bold tracking-widest mb-3">
+                <i class="fas fa-star"></i>
+                <span>FEATURED THIS MONTH</span>
+            </div>
+            <h2 class="font-display text-4xl font-semibold tracking-tight text-zinc-900">Most Researched Peptides</h2>
+            <p class="mt-3 text-lg text-zinc-600 max-w-md mx-auto">Our top 3 peptides based on research volume and clinical interest in 2026.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <!-- Featured Card 1: Retatrutide -->
+            <div class="group relative bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 h-[420px]">
+                <!-- Front: Image + Info -->
+                <div class="absolute inset-0">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Retatrutide" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+                    
+                    <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                        <div class="flex items-center gap-x-2 mb-3">
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur text-xs font-bold rounded-full">GLP-1 / GIP / Glucagon</span>
+                        </div>
+                        <h3 class="font-display text-4xl font-semibold tracking-tight">Retatrutide</h3>
+                        <p class="text-white/80 text-sm mt-1">Triple agonist • Superior weight loss</p>
+                    </div>
+                </div>
+                
+                <!-- Hover Overlay -->
+                <div class="absolute inset-0 bg-black/90 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                    <div class="text-center px-8">
+                        <div class="text-white text-sm font-medium mb-4">RESEARCH PROTOCOL</div>
+                        <a href="retatrutide-protocol.html" 
+                           class="inline-flex items-center gap-x-3 px-8 py-3.5 bg-white text-black font-semibold rounded-2xl hover:bg-pink-600 hover:text-white transition-all text-sm">
+                            <span>VIEW FULL PROTOCOL</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <div class="mt-4 text-xs text-white/60">2 mg → 12 mg weekly escalation</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Card 2: Tirzepatide -->
+            <div class="group relative bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 h-[420px]">
+                <div class="absolute inset-0">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Tirzepatide" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+                    
+                    <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                        <div class="flex items-center gap-x-2 mb-3">
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur text-xs font-bold rounded-full">GLP-1 / GIP Dual Agonist</span>
+                        </div>
+                        <h3 class="font-display text-4xl font-semibold tracking-tight">Tirzepatide</h3>
+                        <p class="text-white/80 text-sm mt-1">Dual incretin • Up to 20% weight loss</p>
+                    </div>
+                </div>
+                
+                <div class="absolute inset-0 bg-black/90 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                    <div class="text-center px-8">
+                        <div class="text-white text-sm font-medium mb-4">RESEARCH PROTOCOL</div>
+                        <a href="tirzepatide-protocol.html" 
+                           class="inline-flex items-center gap-x-3 px-8 py-3.5 bg-white text-black font-semibold rounded-2xl hover:bg-pink-600 hover:text-white transition-all text-sm">
+                            <span>VIEW FULL PROTOCOL</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <div class="mt-4 text-xs text-white/60">2.5 mg → 15 mg weekly escalation</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Card 3: BPC-157 -->
+            <div class="group relative bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 h-[420px]">
+                <div class="absolute inset-0">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="BPC-157" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+                    
+                    <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                        <div class="flex items-center gap-x-2 mb-3">
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur text-xs font-bold rounded-full">Healing Peptide</span>
+                        </div>
+                        <h3 class="font-display text-4xl font-semibold tracking-tight">BPC-157</h3>
+                        <p class="text-white/80 text-sm mt-1">Tissue repair • Gut healing • Anti-inflammatory</p>
+                    </div>
+                </div>
+                
+                <div class="absolute inset-0 bg-black/90 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                    <div class="text-center px-8">
+                        <div class="text-white text-sm font-medium mb-4">RESEARCH PROTOCOL</div>
+                        <a href="bpc-157-protocol.html" 
+                           class="inline-flex items-center gap-x-3 px-8 py-3.5 bg-white text-black font-semibold rounded-2xl hover:bg-pink-600 hover:text-white transition-all text-sm">
+                            <span>VIEW FULL PROTOCOL</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <div class="mt-4 text-xs text-white/60">250–500 mcg daily • 4–6 weeks</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BEGINNERS GUIDES (Exact layout modeled after peptidedosages.com Essential Guides Section) -->
+    <div class="max-w-screen-2xl mx-auto px-8 py-20 bg-white border-b border-zinc-100">
+        <div class="max-w-3xl mx-auto text-center mb-14">
+            <div class="text-pink-600 text-xs font-bold tracking-[3px] mb-4">ESSENTIAL GUIDES</div>
+            <h2 class="font-display text-5xl font-semibold tracking-tight text-zinc-900">Everything you need to get started</h2>
+            <p class="mt-5 text-xl text-zinc-600">Our most important beginner resources — written clearly and updated regularly.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <!-- Essential Guide 1 -->
+            <div class="group bg-white border border-zinc-200 hover:border-pink-300 rounded-3xl p-9 transition-all duration-300 flex flex-col h-full">
+                <div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-500 text-white rounded-2xl flex items-center justify-center mb-8">
+                        <i class="fas fa-book-open text-2xl"></i>
+                    </div>
+                    <h3 class="font-display text-3xl font-semibold tracking-tight leading-tight">The Complete Beginner’s Guide to Peptide Research</h3>
+                    <p class="mt-5 text-[15px] text-zinc-600 leading-relaxed">A step-by-step introduction to peptide research — from basic terminology and safety principles to understanding how different peptides work in the body.</p>
+                </div>
+                <div class="mt-auto pt-8">
+                    <a href="beginners-guide-to-peptide-research.html" class="inline-flex items-center text-sm font-semibold text-pink-600 group-hover:text-pink-700 transition-all">
+                        Read the full guide <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Essential Guide 2 -->
+            <div class="group bg-white border border-zinc-200 hover:border-pink-300 rounded-3xl p-9 transition-all duration-300 flex flex-col h-full">
+                <div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-500 text-white rounded-2xl flex items-center justify-center mb-8">
+                        <i class="fas fa-syringe text-2xl"></i>
+                    </div>
+                    <h3 class="font-display text-3xl font-semibold tracking-tight leading-tight">How to Reconstitute Peptides Safely</h3>
+                    <p class="mt-5 text-[15px] text-zinc-600 leading-relaxed">Detailed instructions on proper reconstitution techniques, choosing the right diluent, storage best practices, and avoiding common contamination risks.</p>
+                </div>
+                <div class="mt-auto pt-8">
+                    <a href="beginners-guide-to-peptide-research.html" class="inline-flex items-center text-sm font-semibold text-pink-600 group-hover:text-pink-700 transition-all">
+                        Read the full guide <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Essential Guide 3 -->
+            <div class="group bg-white border border-zinc-200 hover:border-pink-300 rounded-3xl p-9 transition-all duration-300 flex flex-col h-full">
+                <div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-500 text-white rounded-2xl flex items-center justify-center mb-8">
+                        <i class="fas fa-balance-scale text-2xl"></i>
+                    </div>
+                    <h3 class="font-display text-3xl font-semibold tracking-tight leading-tight">Peptide Dosing & Titration 101</h3>
+                    <p class="mt-5 text-[15px] text-zinc-600 leading-relaxed">Learn how to calculate accurate doses, understand titration schedules, and safely adjust protocols based on research goals and individual response.</p>
+                </div>
+                <div class="mt-auto pt-8">
+                    <a href="beginners-guide-to-peptide-research.html" class="inline-flex items-center text-sm font-semibold text-pink-600 group-hover:text-pink-700 transition-all">
+                        Read the full guide <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WHY OUR GUIDES -->
+    <div class="max-w-screen-2xl mx-auto px-8 py-20">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="text-pink-600 text-xs font-bold tracking-[2px] mb-3">TRUSTED BY RESEARCHERS</div>
+            <h2 class="font-display text-5xl font-semibold tracking-tight text-zinc-900">Why Our Guides Stand Out</h2>
+            <p class="mt-6 text-xl text-zinc-600">Every protocol on Paragon Peptides is built from peer-reviewed studies, tested in real research settings, and continuously updated as new data emerges.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-6xl mx-auto">
+            <div class="text-center">
+                <div class="mx-auto w-16 h-16 bg-pink-100 text-pink-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-microscope text-3xl"></i>
+                </div>
+                <div class="font-semibold text-xl">Peer-Reviewed Sources</div>
+                <div class="mt-3 text-sm text-zinc-600">All dosing, reconstitution, and safety data is sourced directly from published clinical and preclinical studies.</div>
+            </div>
+            <div class="text-center">
+                <div class="mx-auto w-16 h-16 bg-pink-100 text-pink-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-sync-alt text-3xl"></i>
+                </div>
+                <div class="font-semibold text-xl">Continuously Updated</div>
+                <div class="mt-3 text-sm text-zinc-600">Our team monitors new research weekly and updates protocols within 48 hours of significant findings.</div>
+            </div>
+            <div class="text-center">
+                <div class="mx-auto w-16 h-16 bg-pink-100 text-pink-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-shield-alt text-3xl"></i>
+                </div>
+                <div class="font-semibold text-xl">Safety First</div>
+                <div class="mt-3 text-sm text-zinc-600">Every guide includes comprehensive side effect profiles, contraindications, and monitoring recommendations.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ESSENTIAL PEPTIDES -->
+    <div class="bg-zinc-900 text-white py-20">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="max-w-2xl">
+                <div class="text-pink-400 text-xs font-bold tracking-[2px]">ESSENTIAL RESEARCH TOOLS</div>
+                <h2 class="font-display text-5xl font-semibold tracking-tight mt-3">The peptides every researcher should know</h2>
+                <p class="mt-6 text-lg text-white/70">These 6 peptides form the foundation of most peptide research stacks in 2026. Master these first.</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mt-12">
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all">
+                    <div class="text-pink-400 text-xs font-bold">MOST POPULAR</div>
+                    <div class="font-display text-2xl font-semibold mt-2">Retatrutide</div>
+                    <div class="text-xs text-white/50 mt-1">Triple agonist • Weight loss</div>
+                </div>
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all">
+                    <div class="font-display text-2xl font-semibold mt-2">Tirzepatide</div>
+                    <div class="text-xs text-white/50 mt-1">Dual agonist • Metabolic</div>
+                </div>
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all">
+                    <div class="font-display text-2xl font-semibold mt-2">BPC-157</div>
+                    <div class="text-xs text-white/50 mt-1">Healing • Gut repair</div>
+                </div>
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all">
+                    <div class="font-display text-2xl font-semibold mt-2">GHK-Cu</div>
+                    <div class="text-xs text-white/50 mt-1">Skin • Anti-aging</div>
+                </div>
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all">
+                    <div class="font-display text-2xl font-semibold mt-2">TB-500</div>
+                    <div class="text-xs text-white/50 mt-1">Recovery • Flexibility</div>
+                </div>
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all">
+                    <div class="font-display text-2xl font-semibold mt-2">Ipamorelin</div>
+                    <div class="text-xs text-white/50 mt-1">GH release • Sleep</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resource Center -->
+    <div class="max-w-screen-2xl mx-auto px-8 pb-16">
+        <div class="bg-white border border-zinc-100 rounded-3xl p-10">
+            <div class="flex items-end justify-between mb-8">
+                <div>
+                    <div class="text-pink-600 text-xs font-bold tracking-widest">EXPLORE MORE</div>
+                    <h3 class="font-display text-3xl font-semibold tracking-tight">Resource Center</h3>
+                </div>
+                <a href="#" class="hidden md:flex items-center text-sm font-medium text-pink-600 hover:text-pink-700">
+                    View all resources <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- Protocols -->
+                <div class="resource-card border border-zinc-100 rounded-2xl p-6 hover:border-pink-200 group">
+                    <div class="w-11 h-11 bg-pink-100 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-pink-200 transition-colors">
+                        <i class="fas fa-file-medical text-pink-600 text-xl"></i>
+                    </div>
+                    <div class="font-semibold text-lg mb-1">Protocols</div>
+                    <div class="text-sm text-zinc-600 mb-4">Step-by-step reconstitution and administration guides for every peptide.</div>
+                    <a href="#" class="text-xs font-semibold text-pink-600 flex items-center gap-x-1 group-hover:gap-x-2 transition-all">
+                        BROWSE PROTOCOLS <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+                
+                <!-- Learn -->
+                <div class="resource-card border border-zinc-100 rounded-2xl p-6 hover:border-pink-200 group">
+                    <div class="w-11 h-11 bg-emerald-100 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-emerald-200 transition-colors">
+                        <i class="fas fa-graduation-cap text-emerald-600 text-xl"></i>
+                    </div>
+                    <div class="font-semibold text-lg mb-1">Learn</div>
+                    <div class="text-sm text-zinc-600 mb-4">In-depth articles on peptide mechanisms, research findings, and safety.</div>
+                    <a href="#" class="text-xs font-semibold text-pink-600 flex items-center gap-x-1 group-hover:gap-x-2 transition-all">
+                        START LEARNING <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+                
+                <!-- Company -->
+                <div class="resource-card border border-zinc-100 rounded-2xl p-6 hover:border-pink-200 group">
+                    <div class="w-11 h-11 bg-amber-100 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-amber-200 transition-colors">
+                        <i class="fas fa-building text-amber-600 text-xl"></i>
+                    </div>
+                    <div class="font-semibold text-lg mb-1">Company</div>
+                    <div class="text-sm text-zinc-600 mb-4">Quality standards, third-party testing, and our commitment to research integrity.</div>
+                    <a href="#" class="text-xs font-semibold text-pink-600 flex items-center gap-x-1 group-hover:gap-x-2 transition-all">
+                        ABOUT PARAGON <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-zinc-100">
+        <div class="max-w-screen-2xl mx-auto px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-y-10">
+                <div>
+                    <div class="flex items-center gap-x-2 mb-4">
+                        <div class="w-7 h-7 bg-gradient-to-br from-pink-500 to-rose-500 rounded-xl flex items-center justify-center">
+                            <span class="text-white text-xs font-bold">P</span>
+                        </div>
+                        <span class="font-display font-semibold tracking-tight">Paragon Peptides</span>
+                    </div>
+                    <p class="text-xs text-zinc-500 max-w-[220px]">Advancing peptide research with precision and integrity since 2023.</p>
+                </div>
+                
+                <div>
+                    <div class="font-semibold text-sm mb-4">Resources</div>
+                    <div class="space-y-2 text-sm text-zinc-600">
+                        <a href="catalog.html" class="block hover:text-pink-600">Research Protocols</a>
+                        <a href="peptide-calculator.html" class="block hover:text-pink-600">Peptide Calculator</a>
+                        <a href="how-to-reconstitute-peptides-safely.html" class="block hover:text-pink-600">Safety Guidelines</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="font-semibold text-sm mb-4">Company</div>
+                    <div class="space-y-2 text-sm text-zinc-600">
+                        <a href="#" class="block hover:text-pink-600">About Us</a>
+                        <a href="#" class="block hover:text-pink-600">Quality Standards</a>
+                        <a href="#" class="block hover:text-pink-600">Contact Research Team</a>
+                    </div>
+                </div>
+                
+                <div class="text-xs text-zinc-500">
+                    © 2026 Paragon Peptides<br>
+                    All content is for research purposes only.<br>
+                    Not intended for human consumption.<br><br>
+                    <span class="text-[10px]">Modeled after premium research resources • Built with precision</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Peptide Detail Modal -->
+    <div id="peptide-modal" onclick="if (event.target.id === 'peptide-modal') closeModal()" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-zinc-100">
+            
+            <!-- Modal Header -->
+            <div class="px-8 py-6 border-b flex items-center justify-between bg-zinc-50">
+                <div class="flex items-center gap-x-4">
+                    <div id="modal-icon" class="w-12 h-12 rounded-2xl flex items-center justify-center text-white text-2xl font-bold"></div>
+                    <div>
+                        <div id="modal-name" class="font-display text-3xl font-semibold tracking-tight"></div>
+                        <div id="modal-category" class="text-sm text-zinc-500 font-medium"></div>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="w-10 h-10 flex items-center justify-center text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-2xl transition-all">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-8 overflow-y-auto max-h-[calc(90vh-140px)]">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    
+                    <!-- Left: Quick Info -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div>
+                            <div class="text-xs font-bold text-zinc-500 tracking-widest mb-1.5">RESEARCH FOCUS</div>
+                            <div id="modal-focus" class="text-lg font-semibold text-zinc-800"></div>
+                        </div>
+                        
+                        <div>
+                            <div class="text-xs font-bold text-zinc-500 tracking-widest mb-1.5">TYPICAL RESEARCH DOSE</div>
+                            <div id="modal-dose" class="font-mono text-xl font-semibold text-pink-600"></div>
+                        </div>
+                        
+                        <div class="pt-4 border-t">
+                            <div class="flex items-center justify-between text-xs mb-3">
+                                <div class="font-bold text-zinc-500">QUICK ACTIONS</div>
+                            </div>
+                            <div class="space-y-2">
+                                <button onclick="openFullProtocol()" 
+                                        class="w-full flex items-center justify-center gap-x-2 px-4 py-2.5 text-sm font-semibold rounded-2xl border border-pink-200 text-pink-700 hover:bg-pink-50 transition-all">
+                                    <i class="fas fa-file-alt"></i>
+                                    <span id="modal-protocol-btn">View Full Protocol Page</span>
+                                </button>
+                                <button onclick="addToCompareFromModal()" 
+                                        class="w-full flex items-center justify-center gap-x-2 px-4 py-2.5 text-sm font-semibold rounded-2xl border border-zinc-200 hover:bg-zinc-50 transition-all">
+                                    <i class="fas fa-plus"></i>
+                                    <span>Add to Comparison</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Detailed Sections -->
+                    <div class="lg:col-span-3 space-y-8">
+                        
+                        <div>
+                            <div class="section-header flex items-center gap-x-2 mb-3">
+                                <i class="fas fa-info-circle text-pink-500"></i>
+                                <span>Overview</span>
+                            </div>
+                            <div id="modal-overview" class="text-sm text-zinc-600 leading-relaxed"></div>
+                        </div>
+                        
+                        <div>
+                            <div class="section-header flex items-center gap-x-2 mb-3">
+                                <i class="fas fa-star text-pink-500"></i>
+                                <span>Key Research Benefits</span>
+                            </div>
+                            <div id="modal-benefits" class="text-sm text-zinc-600 space-y-1.5"></div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <div class="section-header flex items-center gap-x-2 mb-3">
+                                    <i class="fas fa-flask text-pink-500"></i>
+                                    <span>Reconstitution</span>
+                                </div>
+                                <div id="modal-recon" class="text-sm text-zinc-600"></div>
+                            </div>
+                            
+                            <div>
+                                <div class="section-header flex items-center gap-x-2 mb-3">
+                                    <i class="fas fa-exclamation-triangle text-amber-500"></i>
+                                    <span>Side Effects</span>
+                                </div>
+                                <div id="modal-sides" class="text-sm text-zinc-600"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="px-8 py-4 bg-zinc-50 border-t flex items-center justify-end gap-x-3">
+                <button onclick="closeModal()" class="px-6 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-800">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compare Modal -->
+    <div id="compare-modal" onclick="if (event.target.id === 'compare-modal') closeCompareModal()" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl max-w-[1200px] w-full max-h-[90vh] overflow-hidden shadow-2xl border border-zinc-100">
+            
+            <div class="px-8 py-5 border-b flex items-center justify-between bg-zinc-50">
+                <div class="font-display text-2xl font-semibold tracking-tight">Peptide Comparison</div>
+                <button onclick="closeCompareModal()" class="w-9 h-9 flex items-center justify-center text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="p-8 overflow-auto max-h-[calc(90vh-80px)]">
+                <div id="compare-content" class="overflow-x-auto">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            
+            <div class="px-8 py-4 bg-zinc-50 border-t flex justify-end">
+                <button onclick="closeCompareModal()" class="px-6 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-800">Close Comparison</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tailwind script
+        function initTailwind() {
+            document.documentElement.style.setProperty('--accent', '#ff1493');
+        }
+        
+        // Peptide Data (15 peptides)
+        const peptides = [
+            {
+                id: "retatrutide",
+                name: "Retatrutide",
+                category: "GLP-1 / GIP / Glucagon",
+                tagColor: "emerald",
+                shortDesc: "Triple agonist for advanced metabolic research",
+                focus: "Weight loss • Insulin sensitivity • Energy expenditure",
+                dose: "2–12 mg/week (escalating)",
+                overview: "Retatrutide is a novel triple agonist targeting GLP-1, GIP, and glucagon receptors. It represents the next generation of incretin-based therapeutics with superior weight loss efficacy in research models.",
+                benefits: [
+                    "Superior weight reduction vs dual agonists",
+                    "Significant improvement in glycemic control",
+                    "Increased energy expenditure via glucagon agonism",
+                    "Potential cardiovascular and liver benefits"
+                ],
+                recon: "Add 2–4 mL bacteriostatic water to 10–20 mg vial. Typical concentration: 5–10 mg/mL.",
+                sides: "Nausea, vomiting, diarrhea (dose-dependent). Generally well tolerated with slow titration.",
+                protocolFile: null,
+                icon: "fa-weight"
+            },
+            {
+                id: "tirzepatide",
+                name: "Tirzepatide",
+                category: "GLP-1 / GIP Dual Agonist",
+                tagColor: "emerald",
+                shortDesc: "Dual incretin agonist for metabolic research",
+                focus: "Weight loss • Type 2 diabetes • Appetite regulation",
+                dose: "2.5–15 mg/week (escalating)",
+                overview: "Tirzepatide is a dual GIP and GLP-1 receptor agonist that has demonstrated exceptional efficacy in weight management and glycemic control in clinical research.",
+                benefits: [
+                    "Up to 20%+ body weight reduction in studies",
+                    "Powerful appetite suppression",
+                    "Improved insulin sensitivity",
+                    "Cardiovascular risk reduction"
+                ],
+                recon: "Add 2 mL bacteriostatic water to 10–15 mg vial → 5–7.5 mg/mL concentration.",
+                sides: "Gastrointestinal (nausea, constipation). Usually transient with proper titration.",
+                protocolFile: "tirzepatide-protocol.html",
+                icon: "fa-chart-line"
+            },
+            {
+                id: "bpc-157",
+                name: "BPC-157",
+                category: "Healing Peptide",
+                tagColor: "rose",
+                shortDesc: "Body protection compound for tissue repair",
+                focus: "Gut healing • Tendon/ligament repair • Anti-inflammatory",
+                dose: "250–500 mcg/day",
+                overview: "BPC-157 is a synthetic 15-amino acid peptide derived from a protective protein found in human gastric juice. It has shown remarkable healing properties across multiple tissue types in research.",
+                benefits: [
+                    "Accelerated tendon, ligament & muscle healing",
+                    "Strong gastroprotective and gut-healing effects",
+                    "Anti-inflammatory and cytoprotective",
+                    "Neuroprotective potential"
+                ],
+                recon: "Add 2 mL bacteriostatic water to 5 mg vial → 2.5 mg/mL. Stable for 30+ days refrigerated.",
+                sides: "Excellent safety profile. Very few side effects reported in research.",
+                protocolFile: "bpc-157-protocol.html",
+                icon: "fa-heartbeat"
+            },
+            {
+                id: "ghk-cu",
+                name: "GHK-Cu",
+                category: "Copper Peptide",
+                tagColor: "amber",
+                shortDesc: "Regenerative copper complex for skin & repair",
+                focus: "Skin rejuvenation • Collagen synthesis • Wound healing",
+                dose: "1–2 mg/day (topical or subcutaneous)",
+                overview: "GHK-Cu (glycyl-L-histidyl-L-lysine copper) is a naturally occurring copper complex with potent regenerative, anti-inflammatory, and antioxidant properties. Widely studied for skin health and tissue remodeling.",
+                benefits: [
+                    "Stimulates collagen and elastin production",
+                    "Powerful antioxidant and anti-inflammatory",
+                    "Accelerates wound healing and tissue remodeling",
+                    "Improves skin firmness and reduces fine lines"
+                ],
+                recon: "Add 2 mL bacteriostatic water to 50–100 mg vial. Topical or subcutaneous use.",
+                sides: "Very safe. Rare mild irritation at injection site.",
+                protocolFile: "ghk-cu-protocol.html",
+                icon: "fa-magic"
+            },
+            {
+                id: "tb-500",
+                name: "TB-500",
+                category: "Healing / Recovery",
+                tagColor: "rose",
+                shortDesc: "Thymosin Beta-4 fragment for systemic healing",
+                focus: "Muscle recovery • Flexibility • Injury repair",
+                dose: "2–5 mg/week (loading) then maintenance",
+                overview: "TB-500 is a synthetic version of Thymosin Beta-4, a protein that plays a key role in actin sequestration and cell migration. It promotes healing throughout the body, not just at the injury site.",
+                benefits: [
+                    "Enhanced muscle recovery and repair",
+                    "Improved flexibility and reduced inflammation",
+                    "Promotes angiogenesis and cell migration",
+                    "Systemic healing effects"
+                ],
+                recon: "Add 2–4 mL bacteriostatic water to 5–10 mg vial. Typical concentration 2.5 mg/mL.",
+                sides: "Generally well tolerated. Occasional mild lethargy or headache reported.",
+                protocolFile: "tb-500-protocol.html",
+                icon: "fa-running"
+            },
+            {
+                id: "glow-blend",
+                name: "Glow Blend",
+                category: "Skin / Anti-Aging Blend",
+                tagColor: "amber",
+                shortDesc: "Synergistic blend for skin radiance & repair",
+                focus: "Skin health • Collagen • Anti-aging",
+                dose: "Varies by blend ratio (typically 1–3 mg/day)",
+                overview: "Glow Blend combines GHK-Cu with complementary peptides for enhanced skin rejuvenation, collagen synthesis, and anti-aging effects. Popular in aesthetic and regenerative research.",
+                benefits: [
+                    "Enhanced skin firmness and elasticity",
+                    "Reduction in fine lines and wrinkles",
+                    "Improved skin tone and radiance",
+                    "Synergistic regenerative effects"
+                ],
+                recon: "Follow specific blend instructions. Usually reconstituted with 2–3 mL bacteriostatic water.",
+                sides: "Excellent safety profile. Minimal reported side effects.",
+                protocolFile: "glow-blend-protocol.html",
+                icon: "fa-spa"
+            },
+            {
+                id: "semax",
+                name: "Semax",
+                category: "Nootropic",
+                tagColor: "violet",
+                shortDesc: "Synthetic ACTH analog for cognitive enhancement",
+                focus: "Focus • Memory • Neuroprotection • Stress resilience",
+                dose: "200–600 mcg/day (nasal or subcutaneous)",
+                overview: "Semax is a synthetic heptapeptide analog of ACTH(4-10) with potent nootropic, neuroprotective, and adaptogenic properties. Widely researched in Russia for cognitive enhancement and brain health.",
+                benefits: [
+                    "Improved focus, memory, and mental clarity",
+                    "Neuroprotective and neuroregenerative effects",
+                    "Enhanced stress resilience",
+                    "Potential benefits in neurodegenerative models"
+                ],
+                recon: "Nasal spray or add 2 mL bacteriostatic water for injection. Typical 300 mcg per spray.",
+                sides: "Very safe profile. Rare mild nasal irritation with spray form.",
+                protocolFile: "semax-protocol.html",
+                icon: "fa-brain"
+            },
+            {
+                id: "selank",
+                name: "Selank",
+                category: "Nootropic / Anxiolytic",
+                tagColor: "violet",
+                shortDesc: "Synthetic tuftsin analog for anxiety & cognition",
+                focus: "Anxiety reduction • Cognitive enhancement • Mood",
+                dose: "250–500 mcg/day (nasal or subcutaneous)",
+                overview: "Selank is a synthetic analog of the immunomodulatory peptide tuftsin. It exhibits strong anxiolytic effects without sedation, along with cognitive-enhancing and immunomodulatory properties.",
+                benefits: [
+                    "Significant reduction in anxiety and stress",
+                    "Improved cognitive performance under stress",
+                    "No sedation or dependence",
+                    "Immunomodulatory benefits"
+                ],
+                recon: "Nasal spray preferred. Alternatively, reconstitute 5 mg vial with 2 mL for injection.",
+                sides: "Excellent safety. No significant side effects reported in studies.",
+                protocolFile: "selank-protocol.html",
+                icon: "fa-brain"
+            },
+            {
+                id: "cerebrolysin",
+                name: "Cerebrolysin",
+                category: "Neurotrophic / Nootropic",
+                tagColor: "violet",
+                shortDesc: "Porcine brain-derived neurotrophic peptides",
+                focus: "Brain health • Neurodegeneration • Cognitive recovery",
+                dose: "5–30 mL/day (intravenous or intramuscular)",
+                overview: "Cerebrolysin is a mixture of low-molecular-weight peptides and amino acids derived from porcine brain tissue. It mimics the action of endogenous neurotrophic factors and has been extensively studied for neurodegenerative conditions.",
+                benefits: [
+                    "Neuroprotective and neurotrophic effects",
+                    "Improved cognitive function in research models",
+                    "Potential benefits in stroke and dementia research",
+                    "Supports neuronal survival and plasticity"
+                ],
+                recon: "Ready-to-use solution. No reconstitution needed. Administered IV or IM.",
+                sides: "Generally well tolerated. Occasional dizziness or headache.",
+                protocolFile: "cerebrolysin-protocol.html",
+                icon: "fa-brain"
+            },
+            {
+                id: "aod-9604",
+                name: "AOD-9604",
+                category: "Fat Loss / Metabolic",
+                tagColor: "emerald",
+                shortDesc: "Modified HGH fragment for lipolysis",
+                focus: "Fat metabolism • Lipolysis • Metabolic health",
+                dose: "300–500 mcg/day",
+                overview: "AOD-9604 is a modified fragment of human growth hormone (HGH 177-191) designed to stimulate lipolysis without affecting blood sugar or growth. It is one of the most researched fat-loss peptides.",
+                benefits: [
+                    "Stimulates fat breakdown (lipolysis)",
+                    "Does not affect insulin or glucose levels",
+                    "May support metabolic rate",
+                    "No impact on growth or IGF-1"
+                ],
+                recon: "Add 2 mL bacteriostatic water to 5 mg vial → 2.5 mg/mL concentration.",
+                sides: "Excellent safety profile. Minimal reported side effects.",
+                protocolFile: "aod-9604-protocol.html",
+                icon: "fa-fire"
+            },
+            {
+                id: "ipamorelin",
+                name: "Ipamorelin",
+                category: "GHRP (Growth Hormone)",
+                tagColor: "sky",
+                shortDesc: "Selective growth hormone secretagogue",
+                focus: "Recovery • Sleep • Anti-aging • Body composition",
+                dose: "200–300 mcg 1–3× daily",
+                overview: "Ipamorelin is a highly selective growth hormone releasing peptide (GHRP) that stimulates the pituitary to release GH with minimal side effects. It is one of the cleanest GHRPs available for research.",
+                benefits: [
+                    "Increases natural GH pulses",
+                    "Improved recovery and sleep quality",
+                    "Supports lean mass and fat loss",
+                    "Minimal cortisol or prolactin increase"
+                ],
+                recon: "Add 2 mL bacteriostatic water to 5–10 mg vial. Typical 100–300 mcg per dose.",
+                sides: "Very well tolerated. Rare mild water retention or hunger.",
+                protocolFile: "ipamorelin-protocol.html",
+                icon: "fa-dumbbell"
+            },
+            {
+                id: "tesamorelin",
+                name: "Tesamorelin",
+                category: "GHRH Analog",
+                tagColor: "sky",
+                shortDesc: "Growth hormone releasing hormone analog",
+                focus: "Visceral fat reduction • GH axis • Body composition",
+                dose: "2 mg/day (subcutaneous)",
+                overview: "Tesamorelin is a stabilized analog of Growth Hormone Releasing Hormone (GHRH) that stimulates endogenous GH production. It is particularly noted for its ability to reduce visceral adipose tissue.",
+                benefits: [
+                    "Significant reduction in visceral abdominal fat",
+                    "Increases pulsatile GH and IGF-1",
+                    "Improves body composition",
+                    "Metabolic research applications"
+                ],
+                recon: "Add 2 mL bacteriostatic water to 2 mg vial → 1 mg/mL. Inject at bedtime.",
+                sides: "Generally mild: injection site reactions, joint pain, headache.",
+                protocolFile: "tesamorelin-protocol.html",
+                icon: "fa-user-md"
+            },
+            {
+                id: "melanotan-ii",
+                name: "Melanotan II",
+                category: "Melanocortin Agonist",
+                tagColor: "orange",
+                shortDesc: "Synthetic melanocortin for tanning & libido",
+                focus: "Skin pigmentation • Libido • Appetite regulation",
+                dose: "0.25–1 mg/day (loading) then maintenance",
+                overview: "Melanotan II is a potent synthetic analog of α-MSH that activates melanocortin receptors. It stimulates melanin production, increases libido, and can suppress appetite in research models.",
+                benefits: [
+                    "Rapid skin tanning without excessive UV",
+                    "Significant libido enhancement",
+                    "Appetite suppression in some models",
+                    "Potential photoprotective effects"
+                ],
+                recon: "Add 2 mL bacteriostatic water to 10 mg vial → 5 mg/mL. Start low (0.25 mg).",
+                sides: "Facial flushing, nausea (dose-dependent), increased libido, darkening of freckles.",
+                protocolFile: "melanotan-ii-protocol.html",
+                icon: "fa-sun"
+            },
+            {
+                id: "pt-141",
+                name: "PT-141",
+                category: "Melanocortin Agonist",
+                tagColor: "rose",
+                shortDesc: "Bremelanotide for sexual function research",
+                focus: "Sexual arousal • Libido • Erectile function",
+                dose: "1–1.75 mg as needed (30–60 min prior)",
+                overview: "PT-141 (Bremelanotide) is a selective MC4R agonist derived from Melanotan II. It acts centrally in the brain to enhance sexual arousal and desire, independent of vascular pathways.",
+                benefits: [
+                    "Central stimulation of sexual arousal",
+                    "Effective in both male and female models",
+                    "Rapid onset (30–60 minutes)",
+                    "Does not rely on nitric oxide pathway"
+                ],
+                recon: "Add 2–4 mL bacteriostatic water to 10 mg vial. Typical 1–1.75 mg dose.",
+                sides: "Facial flushing, nausea, headache. Usually mild and transient.",
+                protocolFile: "pt-141-protocol.html",
+                icon: "fa-heart"
+            },
+            {
+                id: "kisspeptin-10",
+                name: "Kisspeptin-10",
+                category: "GnRH Stimulator",
+                tagColor: "emerald",
+                shortDesc: "Endogenous regulator of reproductive axis",
+                focus: "Fertility • Testosterone • HPG axis regulation",
+                dose: "10–100 mcg (pulsatile or bolus)",
+                overview: "Kisspeptin-10 is the most potent endogenous stimulator of GnRH neurons. It plays a critical role in the initiation of puberty and regulation of the hypothalamic-pituitary-gonadal (HPG) axis.",
+                benefits: [
+                    "Stimulates natural GnRH pulses",
+                    "Increases LH, FSH, and testosterone",
+                    "Promising for fertility and hypogonadism research",
+                    "Physiological upstream regulation"
+                ],
+                recon: "Add 2–5 mL bacteriostatic water to 5 mg vial. Typical 10–50 mcg doses.",
+                sides: "Excellent safety profile. Very few side effects reported.",
+                protocolFile: "kisspeptin-10-protocol.html",
+                icon: "fa-dna"
+            }
+        ]
+        
+        let selectedForCompare = []
+        
+        // Render all peptide cards
+        function renderPeptides(filteredPeptides = peptides) {
+            const grid = document.getElementById('peptides-grid')
+            grid.innerHTML = ''
+            
+            filteredPeptides.forEach(peptide => {
+                const isSelected = selectedForCompare.includes(peptide.id)
+                
+                const cardHTML = `
+                    <div class="peptide-card bg-white border border-zinc-200 rounded-3xl p-6 cursor-pointer group" 
+                         onclick="showPeptideModal('${peptide.id}')">
+                        
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-11 h-11 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-2xl flex items-center justify-center text-white">
+                                <i class="fas ${peptide.icon} text-lg"></i>
+                            </div>
+                            
+                            <div class="flex items-center gap-x-2">
+                                <span class="peptide-tag bg-${peptide.tagColor}-100 text-${peptide.tagColor}-700">${peptide.category.split(' / ')[0]}</span>
+                                
+                                <div onclick="event.stopImmediatePropagation(); toggleCompare('${peptide.id}', this)" 
+                                     class="w-7 h-7 flex items-center justify-center rounded-xl border ${isSelected ? 'bg-pink-600 border-pink-600 text-white' : 'border-zinc-200 text-zinc-300 group-hover:text-pink-500 group-hover:border-pink-200'} transition-all">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="font-display text-2xl font-semibold tracking-tight text-zinc-900 mb-1">${peptide.name}</div>
+                        <div class="text-sm text-zinc-500 line-clamp-2 mb-4">${peptide.shortDesc}</div>
+                        
+                        <div class="flex items-center justify-between text-xs">
+                            <div class="font-mono text-pink-600 font-medium">${peptide.dose}</div>
+                            <button onclick="event.stopImmediatePropagation(); showPeptideModal('${peptide.id}')" 
+                                    class="px-3 py-1 text-pink-600 hover:bg-pink-50 rounded-xl font-semibold text-xs flex items-center gap-x-1 transition-all">
+                                VIEW DETAILS <i class="fas fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                `
+                grid.innerHTML += cardHTML
+            })
+        }
+        
+        // Filter peptides by search
+        function filterPeptides() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim()
+            
+            if (!query) {
+                renderPeptides(peptides)
+                return
+            }
+            
+            const filtered = peptides.filter(p => 
+                p.name.toLowerCase().includes(query) || 
+                p.category.toLowerCase().includes(query) || 
+                p.shortDesc.toLowerCase().includes(query) ||
+                p.focus.toLowerCase().includes(query)
+            )
+            
+            renderPeptides(filtered)
+        }
+        
+        // Show peptide detail modal
+        let currentPeptide = null
+        
+        function showPeptideModal(peptideId) {
+            const peptide = peptides.find(p => p.id === peptideId)
+            if (!peptide) return
+            
+            currentPeptide = peptide
+            
+            // Populate modal
+            document.getElementById('modal-icon').innerHTML = `<i class="fas ${peptide.icon}"></i>`
+            document.getElementById('modal-icon').className = `w-12 h-12 rounded-2xl flex items-center justify-center text-white text-2xl font-bold bg-gradient-to-br from-zinc-800 to-zinc-900`
+            
+            document.getElementById('modal-name').innerText = peptide.name
+            document.getElementById('modal-category').innerText = peptide.category
+            document.getElementById('modal-focus').innerText = peptide.focus
+            document.getElementById('modal-dose').innerText = peptide.dose
+            document.getElementById('modal-overview').innerHTML = peptide.overview
+            
+            // Benefits
+            const benefitsHTML = peptide.benefits.map(b => 
+                `<div class="flex items-start gap-x-2"><i class="fas fa-check-circle text-pink-500 mt-1 text-xs"></i> <span>${b}</span></div>`
+            ).join('')
+            document.getElementById('modal-benefits').innerHTML = benefitsHTML
+            
+            document.getElementById('modal-recon').innerHTML = peptide.recon
+            document.getElementById('modal-sides').innerHTML = peptide.sides
+            
+            // Protocol button
+            const protocolBtn = document.getElementById('modal-protocol-btn')
+            if (peptide.protocolFile) {
+                protocolBtn.innerHTML = `View Full Protocol Page <i class="fas fa-external-link-alt ml-1.5 text-xs"></i>`
+                protocolBtn.onclick = () => window.open(peptide.protocolFile, '_blank')
+            } else {
+                protocolBtn.innerHTML = `Full Protocol (Coming Soon)`
+                protocolBtn.onclick = () => alert('Full dedicated protocol page for this peptide will be added shortly.')
+            }
+            
+            // Show modal
+            document.getElementById('peptide-modal').classList.remove('hidden')
+            document.getElementById('peptide-modal').classList.add('flex')
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('peptide-modal')
+            modal.classList.remove('flex')
+            modal.classList.add('hidden')
+        }
+        
+        // Toggle compare selection
+        function toggleCompare(peptideId, element) {
+            event.stopImmediatePropagation()
+            
+            const index = selectedForCompare.indexOf(peptideId)
+            
+            if (index > -1) {
+                selectedForCompare.splice(index, 1)
+                element.classList.remove('bg-pink-600', 'border-pink-600', 'text-white')
+                element.classList.add('border-zinc-200', 'text-zinc-300')
+            } else {
+                if (selectedForCompare.length >= 4) {
+                    alert('You can compare a maximum of 4 peptides at once.')
+                    return
+                }
+                selectedForCompare.push(peptideId)
+                element.classList.add('bg-pink-600', 'border-pink-600', 'text-white')
+                element.classList.remove('border-zinc-200', 'text-zinc-300')
+            }
+            
+            // Update floating compare button if exists (optional enhancement)
+        }
+        
+        function addToCompareFromModal() {
+            if (!currentPeptide) return
+            
+            if (selectedForCompare.length >= 4) {
+                alert('Maximum 4 peptides can be compared.')
+                return
+            }
+            
+            if (!selectedForCompare.includes(currentPeptide.id)) {
+                selectedForCompare.push(currentPeptide.id)
+            }
+            
+            closeModal()
+            
+            // Show toast
+            const toast = document.createElement('div')
+            toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-zinc-900 text-white text-sm px-6 py-3 rounded-3xl shadow-xl flex items-center gap-x-2 z-[200]'
+            toast.innerHTML = `<span>${currentPeptide.name} added to comparison</span>`
+            document.body.appendChild(toast)
+            
+            setTimeout(() => {
+                toast.style.transition = 'all 0.3s ease'
+                toast.style.opacity = '0'
+                toast.style.transform = 'translate(-50%, 20px)'
+                setTimeout(() => toast.remove(), 300)
+            }, 1800)
+        }
+        
+        // Show compare modal
+        function showCompareModal() {
+            if (selectedForCompare.length === 0) {
+                // Auto-select first 3 if none selected
+                selectedForCompare = peptides.slice(0, 3).map(p => p.id)
+            }
+            
+            const modal = document.getElementById('compare-modal')
+            const content = document.getElementById('compare-content')
+            
+            const selectedPeptides = peptides.filter(p => selectedForCompare.includes(p.id))
+            
+            let html = `<div class="grid grid-cols-1 md:grid-cols-${selectedPeptides.length} gap-6">`
+            
+            selectedPeptides.forEach(peptide => {
+                html += `
+                    <div class="border border-zinc-200 rounded-2xl p-6 bg-white">
+                        <div class="flex items-center gap-x-3 mb-4">
+                            <div class="w-9 h-9 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-xl flex items-center justify-center text-white flex-shrink-0">
+                                <i class="fas ${peptide.icon}"></i>
+                            </div>
+                            <div>
+                                <div class="font-display font-semibold text-xl tracking-tight">${peptide.name}</div>
+                                <div class="text-xs text-zinc-500">${peptide.category}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4 text-sm">
+                            <div>
+                                <div class="text-xs font-bold text-zinc-500 mb-1">RESEARCH DOSE</div>
+                                <div class="font-mono text-pink-600">${peptide.dose}</div>
+                            </div>
+                            
+                            <div>
+                                <div class="text-xs font-bold text-zinc-500 mb-1">KEY BENEFIT</div>
+                                <div class="text-zinc-600">${peptide.shortDesc}</div>
+                            </div>
+                            
+                            <div>
+                                <div class="text-xs font-bold text-zinc-500 mb-1">FOCUS AREAS</div>
+                                <div class="text-zinc-600">${peptide.focus}</div>
+                            </div>
+                            
+                            <div>
+                                <div class="text-xs font-bold text-zinc-500 mb-1">SIDE EFFECTS</div>
+                                <div class="text-zinc-600 text-xs">${peptide.sides}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-5 pt-4 border-t">
+                            <button onclick="window.open('${peptide.protocolFile || '#'}', '_blank'); closeCompareModal()" 
+                                    class="w-full text-center text-xs font-semibold py-2 rounded-xl border border-pink-200 text-pink-600 hover:bg-pink-50 transition-all">
+                                ${peptide.protocolFile ? 'OPEN FULL PROTOCOL' : 'PROTOCOL COMING SOON'}
+                            </button>
+                        </div>
+                    </div>
+                `
+            })
+            
+            html += `</div>`
+            
+            content.innerHTML = html
+            modal.classList.remove('hidden')
+            modal.classList.add('flex')
+        }
+        
+        function closeCompareModal() {
+            const modal = document.getElementById('compare-modal')
+            modal.classList.remove('flex')
+            modal.classList.add('hidden')
+        }
+        
+        function openFullProtocol() {
+            if (currentPeptide && currentPeptide.protocolFile) {
+                window.open(currentPeptide.protocolFile, '_blank')
+            } else {
+                alert('Full dedicated protocol page coming soon for this peptide.')
+            }
+        }
+        
+        // Initialize everything
+        function initialize() {
+            initTailwind()
+            renderPeptides()
+            
+            // Keyboard support for search
+            document.getElementById('search-input').addEventListener('keydown', function(e) {
+                if (e.key === '/' && document.activeElement.id !== 'search-input') {
+                    e.preventDefault()
+                    this.focus()
+                }
+            })
+            
+            // Easter egg: press "?" to show random peptide
+            document.addEventListener('keydown', function(e) {
+                if (e.key === '?') {
+                    const random = peptides[Math.floor(Math.random() * peptides.length)]
+                    showPeptideModal(random.id)
+                }
+            })
+            
+            // Initial hint
+            setTimeout(() => {
+                const search = document.getElementById('search-input')
+                if (search) {
+                    search.placeholder = "Search peptides... (try 'BPC' or 'Semax')"
+                }
+            }, 3000)
+            
+            console.log('%c[Paragon Peptides] Information Center initialized with 15 peptides', 'color:#ff1493')
+        }
+        
+        window.onload = initialize
+    </script>
+</body>
+</html>
