@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peptide Calculator | Paragon Peptides</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        body { font-family: 'Inter', system_ui, sans-serif; }
+        .font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; font-weight: 600; }
+        .calc-card { background: white; border-radius: 1.5rem; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05); }
+        .result-value { font-size: 1.75rem; line-height: 1.1; font-weight: 700; font-family: 'Space Grotesk', monospace; }
+        .nav-active { color: #ff1493; font-weight: 600; }
+    </style>
+</head>
+<body class="bg-zinc-50">
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-zinc-100 sticky top-0 z-50">
+        <div class="max-w-screen-xl mx-auto">
+            <div class="px-8 py-5 flex items-center justify-between">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-9 h-9 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">P</span>
+                    </div>
+                    <div>
+                        <span class="font-display text-2xl font-semibold tracking-tight">Paragon</span>
+                        <span class="font-display text-2xl font-semibold tracking-tight text-pink-600">Peptides</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="index.html" class="text-zinc-600 hover:text-zinc-900 transition-colors">Information Center</a>
+                    <a href="#" class="nav-active">Calculator</a>
+                    <a href="#" class="text-zinc-600 hover:text-zinc-900 transition-colors">Resources</a>
+                </div>
+                <div>
+                    <a href="index.html" class="px-5 py-2.5 text-sm font-semibold rounded-2xl border border-zinc-200 hover:bg-zinc-50 transition-all flex items-center gap-x-2">
+                        <i class="fas fa-arrow-left text-xs"></i><span>Back to Center</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="bg-white border-b border-zinc-100">
+        <div class="max-w-screen-xl mx-auto px-8 py-12">
+            <div class="max-w-2xl">
+                <div class="flex items-center gap-x-3 mb-4">
+                    <div class="px-3.5 py-1 bg-pink-100 text-pink-700 text-xs font-bold rounded-full flex items-center gap-x-1.5">
+                        <i class="fas fa-calculator"></i>
+                        <span>RESEARCH TOOL</span>
+                    </div>
+                </div>
+                <h1 class="text-5xl font-display font-semibold tracking-tighter text-zinc-900">Peptide Calculator</h1>
+                <p class="mt-4 text-xl text-zinc-600">Advanced multi-peptide stack builder with live dosing calculations and recommended protocols from peer-reviewed data.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-screen-xl mx-auto px-8 py-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left: Stack Builder -->
+            <div class="lg:col-span-5">
+                <div class="calc-card border border-zinc-100 p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <div class="font-semibold text-xl">Stack Builder</div>
+                            <div class="text-xs text-zinc-500">Add up to 6 peptides</div>
+                        </div>
+                        <button onclick="addPeptideToStack()" class="px-4 py-2 text-sm font-semibold rounded-2xl bg-pink-600 text-white hover:bg-pink-700 flex items-center gap-x-2">
+                            <i class="fas fa-plus"></i> <span>Add Peptide</span>
+                        </button>
+                    </div>
+                    
+                    <div id="stack-list" class="space-y-3 min-h-[200px]">
+                        <!-- Dynamic peptide rows added here -->
+                    </div>
+                    
+                    <div class="mt-6 pt-6 border-t flex items-center justify-between text-sm">
+                        <div class="text-zinc-500">Total Daily Volume</div>
+                        <div id="total-volume" class="font-mono font-semibold text-lg text-pink-600">0.00 mL</div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-xs text-zinc-500 px-2">
+                    <i class="fas fa-info-circle mr-1"></i> All calculations are for research purposes only. Always verify with peer-reviewed sources.
+                </div>
+            </div>
+            
+            <!-- Right: Live Calculator -->
+            <div class="lg:col-span-7">
+                <div class="calc-card border border-zinc-100 p-8">
+                    <div class="font-semibold text-xl mb-6 flex items-center gap-x-2">
+                        <i class="fas fa-flask text-pink-500"></i>
+                        <span>Live Dosing Calculator</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Inputs -->
+                        <div class="space-y-5">
+                            <div>
+                                <label class="block text-xs font-bold text-zinc-500 mb-1.5">SELECT PEPTIDE</label>
+                                <select id="peptide-select" onchange="updateRecommendedDose()" class="w-full border border-zinc-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-pink-300">
+                                    <option value="">-- Choose a peptide --</option>
+                                </select>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-zinc-500 mb-1.5">VIAL SIZE (mg)</label>
+                                    <input id="vial-size" type="number" value="5" step="0.1" oninput="calculateDose()" class="w-full border border-zinc-200 rounded-2xl px-4 py-3 text-sm font-mono focus:outline-none focus:border-pink-300">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-zinc-500 mb-1.5">RECON VOLUME (mL)</label>
+                                    <input id="recon-volume" type="number" value="2" step="0.1" oninput="calculateDose()" class="w-full border border-zinc-200 rounded-2xl px-4 py-3 text-sm font-mono focus:outline-none focus:border-pink-300">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-zinc-500 mb-1.5">DESIRED DOSE</label>
+                                <div class="flex gap-2">
+                                    <input id="desired-dose" type="number" value="250" step="1" oninput="calculateDose()" class="flex-1 border border-zinc-200 rounded-2xl px-4 py-3 text-sm font-mono focus:outline-none focus:border-pink-300">
+                                    <select id="dose-unit" onchange="calculateDose()" class="border border-zinc-200 rounded-2xl px-3 py-3 text-sm focus:outline-none focus:border-pink-300">
+                                        <option value="mcg">mcg</option>
+                                        <option value="mg">mg</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-zinc-500 mb-1.5">SYRINGE TYPE</label>
+                                <select id="syringe-type" onchange="calculateDose()" class="w-full border border-zinc-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-pink-300">
+                                    <option value="100">U-100 (100 units/mL)</option>
+                                    <option value="50">U-50 (50 units/mL)</option>
+                                    <option value="30">U-30 (30 units/mL)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Results -->
+                        <div class="bg-zinc-900 text-white rounded-3xl p-6 flex flex-col justify-between">
+                            <div>
+                                <div class="text-xs text-zinc-400 tracking-widest">CALCULATED RESULTS</div>
+                                
+                                <div class="mt-6">
+                                    <div class="text-xs text-zinc-400">CONCENTRATION</div>
+                                    <div id="result-concentration" class="result-value text-white font-mono">2.50 mg/mL</div>
+                                </div>
+                                
+                                <div class="mt-5">
+                                    <div class="text-xs text-zinc-400">VOLUME TO DRAW</div>
+                                    <div id="result-volume" class="result-value text-emerald-400 font-mono">0.10 mL</div>
+                                </div>
+                                
+                                <div class="mt-5">
+                                    <div class="text-xs text-zinc-400">SYRINGE UNITS</div>
+                                    <div id="result-units" class="result-value text-amber-400 font-mono">10 units</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 pt-6 border-t border-zinc-700 flex items-center gap-x-2 text-xs">
+                                <button onclick="useRecommendedDose()" class="flex-1 bg-white text-zinc-900 text-xs font-bold py-2.5 rounded-2xl hover:bg-zinc-100 transition-all">USE RECOMMENDED DOSE</button>
+                                <button onclick="resetCalculator()" class="px-4 py-2.5 text-xs font-semibold text-white hover:text-zinc-300">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Reference -->
+                <div class="mt-6 bg-white border border-zinc-100 rounded-3xl p-6 text-xs">
+                    <div class="font-bold text-zinc-500 mb-3">QUICK REFERENCE — COMMON DOSES</div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-zinc-600">
+                        <div><span class="font-mono text-pink-600">250 mcg</span> — BPC-157, Ipamorelin</div>
+                        <div><span class="font-mono text-pink-600">500 mcg</span> — GHK-Cu, Semax</div>
+                        <div><span class="font-mono text-pink-600">2 mg</span> — Tesamorelin, Retatrutide (weekly)</div>
+                        <div><span class="font-mono text-pink-600">1–1.75 mg</span> — PT-141 (as needed)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-zinc-100 mt-12">
+        <div class="max-w-screen-xl mx-auto px-8 py-10 text-xs text-zinc-500">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-y-3">
+                <div>© 2026 Paragon Peptides • Research Use Only • Not for Human Consumption</div>
+                <div class="flex items-center gap-x-4">
+                    <a href="index.html" class="hover:text-pink-600">Back to Information Center</a>
+                    <span>•</span>
+                    <span>Calculations based on peer-reviewed research data</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Peptide database for calculator
+        const peptideDB = {
+            "BPC-157": { recommended: 250, unit: "mcg", vial: 5, recon: 2 },
+            "GHK-Cu": { recommended: 1000, unit: "mcg", vial: 50, recon: 5 },
+            "Ipamorelin": { recommended: 250, unit: "mcg", vial: 5, recon: 2 },
+            "Semax": { recommended: 300, unit: "mcg", vial: 5, recon: 2 },
+            "Selank": { recommended: 300, unit: "mcg", vial: 5, recon: 2 },
+            "TB-500": { recommended: 2500, unit: "mcg", vial: 5, recon: 2 },
+            "AOD-9604": { recommended: 300, unit: "mcg", vial: 5, recon: 2 },
+            "Tesamorelin": { recommended: 2000, unit: "mcg", vial: 2, recon: 2 },
+            "Retatrutide": { recommended: 2000, unit: "mcg", vial: 10, recon: 2 },
+            "Tirzepatide": { recommended: 2500, unit: "mcg", vial: 10, recon: 2 },
+            "Melanotan II": { recommended: 500, unit: "mcg", vial: 10, recon: 2 },
+            "PT-141": { recommended: 1000, unit: "mcg", vial: 10, recon: 2 },
+            "Kisspeptin-10": { recommended: 50, unit: "mcg", vial: 5, recon: 2 },
+            "Cerebrolysin": { recommended: 5000, unit: "mcg", vial: 5, recon: 2 }
+        }
+        
+        let stack = []
+        
+        function initCalculator() {
+            // Populate peptide select
+            const select = document.getElementById('peptide-select')
+            Object.keys(peptideDB).forEach(name => {
+                const opt = document.createElement('option')
+                opt.value = name
+                opt.textContent = name
+                select.appendChild(opt)
+            })
+            
+            // Set defaults
+            document.getElementById('vial-size').value = 5
+            document.getElementById('recon-volume').value = 2
+            document.getElementById('desired-dose').value = 250
+            document.getElementById('dose-unit').value = 'mcg'
+            
+            // Initial calculation
+            setTimeout(calculateDose, 100)
+            
+            // Add first peptide to stack
+            addPeptideToStack('BPC-157')
+        }
+        
+        function updateRecommendedDose() {
+            const peptide = document.getElementById('peptide-select').value
+            if (!peptide || !peptideDB[peptide]) return
+            
+            const data = peptideDB[peptide]
+            document.getElementById('desired-dose').value = data.recommended
+            document.getElementById('dose-unit').value = data.unit
+            document.getElementById('vial-size').value = data.vial
+            document.getElementById('recon-volume').value = data.recon
+            
+            calculateDose()
+        }
+        
+        function calculateDose() {
+            const vialSize = parseFloat(document.getElementById('vial-size').value) || 0
+            const reconVol = parseFloat(document.getElementById('recon-volume').value) || 0
+            let desiredDose = parseFloat(document.getElementById('desired-dose').value) || 0
+            const doseUnit = document.getElementById('dose-unit').value
+            const syringeType = document.getElementById('syringe-type').value
+            
+            if (vialSize <= 0 || reconVol <= 0 || desiredDose <= 0) {
+                document.getElementById('result-concentration').textContent = '-- mg/mL'
+                document.getElementById('result-volume').textContent = '-- mL'
+                document.getElementById('result-units').textContent = '-- units'
+                return
+            }
+            
+            // Convert everything to mcg for calculation
+            if (doseUnit === 'mg') desiredDose *= 1000
+            
+            const concentrationMgPerMl = vialSize / reconVol
+            const concentrationMcgPerMl = concentrationMgPerMl * 1000
+            
+            const volumeMl = desiredDose / concentrationMcgPerMl
+            const volumeUnits = volumeMl * parseInt(syringeType)
+            
+            // Update UI
+            document.getElementById('result-concentration').innerHTML = `${concentrationMgPerMl.toFixed(2)} <span class="text-xs font-normal text-zinc-400">mg/mL</span>`
+            document.getElementById('result-volume').innerHTML = `${volumeMl.toFixed(2)} <span class="text-xs font-normal text-zinc-400">mL</span>`
+            document.getElementById('result-units').innerHTML = `${Math.round(volumeUnits)} <span class="text-xs font-normal text-zinc-400">units</span>`
+            
+            // Update total volume in stack if applicable
+            updateTotalVolume()
+        }
+        
+        function useRecommendedDose() {
+            const peptide = document.getElementById('peptide-select').value
+            if (!peptide || !peptideDB[peptide]) {
+                alert('Please select a peptide first.')
+                return
+            }
+            
+            const data = peptideDB[peptide]
+            document.getElementById('desired-dose').value = data.recommended
+            document.getElementById('dose-unit').value = data.unit
+            calculateDose()
+        }
+        
+        function resetCalculator() {
+            document.getElementById('peptide-select').value = ''
+            document.getElementById('vial-size').value = 5
+            document.getElementById('recon-volume').value = 2
+            document.getElementById('desired-dose').value = 250
+            document.getElementById('dose-unit').value = 'mcg'
+            document.getElementById('syringe-type').value = '100'
+            
+            document.getElementById('result-concentration').textContent = '-- mg/mL'
+            document.getElementById('result-volume').textContent = '-- mL'
+            document.getElementById('result-units').textContent = '-- units'
+        }
+        
+        // Stack functions
+        function addPeptideToStack(defaultPeptide = null) {
+            if (stack.length >= 6) {
+                alert('Maximum 6 peptides in a stack.')
+                return
+            }
+            
+            const id = Date.now()
+            const peptide = defaultPeptide || Object.keys(peptideDB)[0]
+            
+            const row = document.createElement('div')
+            row.id = `stack-row-${id}`
+            row.className = `flex items-center gap-3 bg-zinc-50 border border-zinc-200 rounded-2xl p-3 text-sm`
+            row.innerHTML = `
+                <div class="flex-1">
+                    <select onchange="updateStackItem(${id}, this)" class="w-full bg-white border border-zinc-200 rounded-xl px-3 py-2 text-sm">
+                        ${Object.keys(peptideDB).map(name => `<option value="${name}" ${name === peptide ? 'selected' : ''}>${name}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="w-24">
+                    <input type="number" value="${peptideDB[peptide].recommended}" step="1" onchange="updateStackItem(${id}, this)" class="w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm font-mono text-right">
+                </div>
+                <div class="w-16 text-xs text-zinc-500 font-medium">mcg</div>
+                <button onclick="removeFromStack(${id})" class="text-zinc-400 hover:text-red-500 px-2"><i class="fas fa-times"></i></button>
+            `
+            
+            document.getElementById('stack-list').appendChild(row)
+            stack.push({ id, peptide, dose: peptideDB[peptide].recommended })
+            updateTotalVolume()
+        }
+        
+        function updateStackItem(id, element) {
+            const item = stack.find(s => s.id === id)
+            if (!item) return
+            
+            if (element.tagName === 'SELECT') {
+                item.peptide = element.value
+                // Update dose input if exists
+                const doseInput = element.parentElement.nextElementSibling.querySelector('input')
+                if (doseInput) doseInput.value = peptideDB[item.peptide].recommended
+                item.dose = peptideDB[item.peptide].recommended
+            } else {
+                item.dose = parseFloat(element.value) || 0
+            }
+            
+            updateTotalVolume()
+        }
+        
+        function removeFromStack(id) {
+            stack = stack.filter(s => s.id !== id)
+            document.getElementById(`stack-row-${id}`).remove()
+            updateTotalVolume()
+        }
+        
+        function updateTotalVolume() {
+            let totalMcg = 0
+            stack.forEach(item => {
+                totalMcg += item.dose || 0
+            })
+            
+            // Rough estimate: assume average 2.5 mg/mL concentration
+            const avgConc = 2.5 // mg/mL
+            const totalMl = (totalMcg / 1000) / avgConc
+            
+            document.getElementById('total-volume').textContent = `${totalMl.toFixed(2)} mL`
+        }
+        
+        // Initialize
+        window.onload = function() {
+            initCalculator()
+            
+            // Keyboard shortcut: press "r" to reset
+            document.addEventListener('keydown', function(e) {
+                if (e.key.toLowerCase() === 'r' && document.activeElement.tagName === 'BODY') {
+                    resetCalculator()
+                }
+            })
+        }
+    </script>
+</body>
+</html>

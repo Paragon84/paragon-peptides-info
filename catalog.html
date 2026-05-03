@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peptide Catalog | Paragon Peptides</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        body { font-family: 'Inter', system_ui, sans-serif; }
+        .font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; font-weight: 600; }
+        .peptide-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .peptide-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
+        .nav-active { color: #ff1493; border-bottom: 2px solid #ff1493; }
+    </style>
+</head>
+<body class="bg-zinc-50">
+    <nav class="bg-white border-b border-zinc-100 sticky top-0 z-50">
+        <div class="max-w-screen-xl mx-auto">
+            <div class="px-8 py-5 flex items-center justify-between">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-9 h-9 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center"><span class="text-white font-bold text-xl">P</span></div>
+                    <div><span class="font-display text-2xl font-semibold tracking-tight">Paragon</span><span class="font-display text-2xl font-semibold tracking-tight text-pink-600">Peptides</span></div>
+                </div>
+                <div class="flex items-center gap-x-6">
+                    <a href="index.html" class="text-sm font-medium text-zinc-600 hover:text-zinc-900">Research Hub</a>
+                    <a href="peptide-calculator.html" class="text-sm font-medium text-zinc-600 hover:text-zinc-900">Calculator</a>
+                    <a href="catalog.html" class="text-sm font-medium text-pink-600">Catalog</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="bg-white border-b border-zinc-100">
+        <div class="max-w-screen-xl mx-auto px-8 py-16">
+            <div class="max-w-3xl">
+                <div class="text-pink-600 text-xs font-bold tracking-[3px]">COMPLETE REFERENCE</div>
+                <h1 class="font-display text-6xl font-semibold tracking-tighter text-zinc-900 mt-3">Peptide Catalog</h1>
+                <p class="mt-6 text-xl text-zinc-600">Browse all single peptides and stacks with detailed protocol information, reconstitution instructions, and research-backed dosing schedules.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-screen-xl mx-auto px-8 py-12">
+        
+        <!-- Tab Selector -->
+        <div class="flex items-center justify-center mb-12">
+            <div class="inline-flex bg-zinc-100 rounded-2xl p-1">
+                <button onclick="showSinglePeptides()" id="tab-single"
+                        class="px-8 py-3 text-sm font-semibold rounded-xl transition-all nav-active">
+                    <i class="fas fa-flask mr-2"></i>Single Peptides
+                </button>
+                <button onclick="showStacks()" id="tab-stacks"
+                        class="px-8 py-3 text-sm font-semibold rounded-xl text-zinc-600 hover:text-zinc-900 transition-all">
+                    <i class="fas fa-layer-group mr-2"></i>Stacks
+                </button>
+            </div>
+        </div>
+
+        <!-- Single Peptides Grid -->
+        <div id="single-peptides-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            
+            <!-- Retatrutide -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Retatrutide" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-pink-100 text-pink-700 text-xs font-bold rounded-full">GLP-1 / GIP / Glucagon</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Retatrutide</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Triple agonist peptide showing superior weight loss results in research. Up to 24% body weight reduction in clinical studies.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Weekly dosing</div>
+                        <a href="retatrutide-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tirzepatide -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Tirzepatide" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-pink-100 text-pink-700 text-xs font-bold rounded-full">GLP-1 / GIP Dual Agonist</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Tirzepatide</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Dual incretin agonist with up to 20% weight loss in research. Combines GLP-1 and GIP receptor activation for enhanced metabolic effects.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Weekly dosing</div>
+                        <a href="tirzepatide-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BPC-157 -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="BPC-157" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full">Healing & Recovery</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">BPC-157</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Body Protection Compound with powerful healing properties. Research shows accelerated tendon, ligament, and muscle repair.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Daily dosing</div>
+                        <a href="bpc-157-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GHK-Cu -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="GHK-Cu" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded-full">Anti-Aging & Skin</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">GHK-Cu</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Copper peptide with powerful collagen stimulation and skin remodeling properties. Research shows improved firmness and wound healing.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Daily dosing</div>
+                        <a href="ghk-cu-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TB-500 -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="TB-500" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full">Healing & Recovery</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">TB-500</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Thymosin Beta-4 fragment with systemic healing properties. Research shows enhanced flexibility, reduced inflammation, and accelerated recovery.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Weekly dosing</div>
+                        <a href="tb-500-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Semax -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Semax" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">Cognitive Enhancement</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Semax</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Nootropic peptide with BDNF and NGF support. Research shows enhanced focus, memory, and neuroprotection without stimulation.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Daily dosing</div>
+                        <a href="semax-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Selank -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Selank" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">Anxiolytic & Mood</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Selank</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Anxiolytic peptide with mood-stabilizing properties. Research shows reduced anxiety without sedation or cognitive impairment.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Daily dosing</div>
+                        <a href="selank-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AOD-9604 -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="AOD-9604" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded-full">Fat Loss</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">AOD-9604</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Modified HGH fragment (177-191) with targeted lipolysis properties. Research shows fat breakdown without affecting blood sugar or muscle mass.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Daily dosing</div>
+                        <a href="aod-9604-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ipamorelin -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Ipamorelin" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded-full">GH Release</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Ipamorelin</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Selective growth hormone secretagogue with excellent safety profile. Research shows natural GH pulses without cortisol or prolactin elevation.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Daily dosing</div>
+                        <a href="ipamorelin-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tesamorelin -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Tesamorelin" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded-full">Metabolic Health</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Tesamorelin</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">GHRH analog with targeted visceral fat reduction. Research shows significant abdominal fat loss and improved metabolic markers.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Daily dosing</div>
+                        <a href="tesamorelin-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Melanotan II -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Melanotan II" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">Tanning & Libido</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Melanotan II</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Melanocortin agonist with tanning and libido-enhancing properties. Research shows increased melanin production and sexual function.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">As needed dosing</div>
+                        <a href="melanotan-ii-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PT-141 -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="PT-141" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-rose-100 text-rose-700 text-xs font-bold rounded-full">Libido Enhancement</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">PT-141</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Melanocortin receptor agonist for sexual dysfunction research. Works through central nervous system pathways, not vascular mechanisms.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">As needed dosing</div>
+                        <a href="pt-141-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kisspeptin-10 -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Kisspeptin-10" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-violet-100 text-violet-700 text-xs font-bold rounded-full">Reproductive Health</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Kisspeptin-10</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Hypothalamic peptide with reproductive hormone regulation. Research shows GnRH stimulation and fertility support applications.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Pulsatile dosing</div>
+                        <a href="kisspeptin-10-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cerebrolysin -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Cerebrolysin" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-cyan-100 text-cyan-700 text-xs font-bold rounded-full">Neuroprotection</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Cerebrolysin</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Neurotrophic peptide mixture with neuroprotective and neuroregenerative properties. Research shows cognitive enhancement and stroke recovery support.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Cyclic dosing</div>
+                        <a href="cerebrolysin-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Glow Blend -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Glow Blend" class="h-32 w-auto object-contain">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-rose-100 text-rose-700 text-xs font-bold rounded-full">Anti-Aging Blend</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Glow Blend</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Multi-peptide blend for skin health and anti-aging research. Combines GHK-Cu with complementary peptides for enhanced collagen and skin remodeling effects.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Daily dosing</div>
+                        <a href="glow-blend-protocol.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Stacks Grid (Hidden by default) -->
+        <div id="stacks-grid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <!-- Fat Loss Stack -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8 relative">
+                    <div class="flex items-center gap-x-4">
+                        <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Retatrutide" class="h-24 w-auto object-contain">
+                        <div class="text-4xl text-zinc-300 font-light">+</div>
+                        <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="AOD-9604" class="h-24 w-auto object-contain">
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded-full">Fat Loss</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Fat Loss Stack</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Retatrutide + AOD-9604. Triple agonist power combined with targeted lipolysis for maximum fat loss synergy in research settings.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">12-16 week protocol</div>
+                        <a href="fat-loss-stack.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Healing Stack -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8 relative">
+                    <div class="flex items-center gap-x-4">
+                        <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="BPC-157" class="h-24 w-auto object-contain">
+                        <div class="text-4xl text-zinc-300 font-light">+</div>
+                        <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="TB-500" class="h-24 w-auto object-contain">
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full">Healing</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Healing Stack</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">BPC-157 + TB-500. Localized repair combined with systemic healing for comprehensive injury recovery and tissue regeneration research.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">4-8 week protocol</div>
+                        <a href="healing-stack.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anti-Aging Stack -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8 relative">
+                    <div class="flex items-center gap-x-4">
+                        <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="GHK-Cu" class="h-24 w-auto object-contain">
+                        <div class="text-4xl text-zinc-300 font-light">+</div>
+                        <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Ipamorelin" class="h-24 w-auto object-contain">
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded-full">Anti-Aging</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Anti-Aging Stack</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">GHK-Cu + Ipamorelin. Skin remodeling and collagen synthesis combined with natural GH release for comprehensive anti-aging research.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Daily protocol</div>
+                        <a href="anti-aging-stack.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cognitive Stack -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8 relative">
+                    <div class="flex items-center gap-x-4">
+                        <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Semax" class="h-24 w-auto object-contain">
+                        <div class="text-4xl text-zinc-300 font-light">+</div>
+                        <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Selank" class="h-24 w-auto object-contain">
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">Cognitive</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Cognitive Stack</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Semax + Selank. Focus and neuroprotection combined with anxiety reduction for comprehensive cognitive enhancement research.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Daily protocol</div>
+                        <a href="cognitive-stack.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recovery Stack -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8 relative">
+                    <div class="flex items-center gap-x-4">
+                        <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Ipamorelin" class="h-24 w-auto object-contain">
+                        <div class="text-4xl text-zinc-300 font-light">+</div>
+                        <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="TB-500" class="h-24 w-auto object-contain">
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full">Recovery</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Recovery Stack</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Ipamorelin + TB-500. Natural GH release combined with systemic healing for comprehensive athletic recovery and sleep optimization research.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Daily + weekly protocol</div>
+                        <a href="recovery-stack.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metabolic Stack -->
+            <div class="peptide-card bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="h-48 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center p-8 relative">
+                    <div class="flex items-center gap-x-4">
+                        <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Tesamorelin" class="h-24 w-auto object-contain">
+                        <div class="text-4xl text-zinc-300 font-light">+</div>
+                        <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Retatrutide" class="h-24 w-auto object-contain">
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-x-2 mb-3">
+                        <span class="px-3 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded-full">Metabolic</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold tracking-tight">Metabolic Stack</h3>
+                    <p class="text-sm text-zinc-600 mt-2 line-clamp-3">Tesamorelin + Retatrutide. Visceral fat targeting combined with triple agonist metabolic effects for comprehensive body composition research.</p>
+                    <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500">Daily + weekly protocol</div>
+                        <a href="metabolic-stack.html" class="px-4 py-2 text-xs font-semibold rounded-xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                            <span>View Protocol</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer class="bg-white border-t border-zinc-100">
+        <div class="max-w-screen-xl mx-auto px-8 py-12 text-xs text-zinc-500">
+            © 2026 Paragon Peptides • For research and educational purposes only • Not for human consumption
+        </div>
+    </footer>
+
+    <script>
+        function showSinglePeptides() {
+            document.getElementById('single-peptides-grid').classList.remove('hidden');
+            document.getElementById('stacks-grid').classList.add('hidden');
+            document.getElementById('tab-single').classList.add('nav-active', 'text-pink-600');
+            document.getElementById('tab-single').classList.remove('text-zinc-600');
+            document.getElementById('tab-stacks').classList.remove('nav-active', 'text-pink-600');
+            document.getElementById('tab-stacks').classList.add('text-zinc-600');
+        }
+        
+        function showStacks() {
+            document.getElementById('single-peptides-grid').classList.add('hidden');
+            document.getElementById('stacks-grid').classList.remove('hidden');
+            document.getElementById('tab-stacks').classList.add('nav-active', 'text-pink-600');
+            document.getElementById('tab-stacks').classList.remove('text-zinc-600');
+            document.getElementById('tab-single').classList.remove('nav-active', 'text-pink-600');
+            document.getElementById('tab-single').classList.add('text-zinc-600');
+        }
+        
+        // Show single peptides by default
+        document.addEventListener('DOMContentLoaded', function() {
+            showSinglePeptides();
+        });
+    </script>
+</body>
+</html>
