@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epithalon Protocol | Paragon Peptides</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .protocol-card {
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .protocol-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .section-header {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #71717a;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .disclaimer {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 0.75rem;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-zinc-50">
+    <!-- Header -->
+    <header class="bg-white border-b border-zinc-100 sticky top-0 z-50">
+        <div class="max-w-screen-xl mx-auto px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-x-3">
+                <a href="index.html" class="flex items-center gap-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-rose-500 rounded-xl flex items-center justify-center">
+                        <span class="text-white text-sm font-bold">P</span>
+                    </div>
+                    <span class="font-display font-semibold tracking-tight">Paragon Peptides</span>
+                </a>
+                <div class="hidden md:flex items-center gap-x-1.5 text-xs px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full font-medium">
+                    <i class="fas fa-check-circle text-xs"></i>
+                    <span>RESEARCH USE ONLY</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-x-4">
+                <a href="peptide-calculator.html" class="hidden md:flex items-center gap-x-2 text-sm font-medium text-zinc-600 hover:text-pink-600 transition-colors">
+                    <i class="fas fa-calculator"></i>
+                    <span>Calculator</span>
+                </a>
+                <a href="index.html" class="text-sm font-medium text-zinc-600 hover:text-pink-600 transition-colors">Back to Hub</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="bg-white border-b border-zinc-100">
+        <div class="max-w-screen-xl mx-auto px-8 py-16">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-y-6">
+                <div>
+                    <div class="flex items-center gap-x-3 mb-4">
+                        <div class="px-4 py-1.5 bg-emerald-100 text-emerald-700 rounded-full text-sm font-bold flex items-center gap-x-2">
+                            <i class="fas fa-flask"></i>
+                            <span>TETRAPEPTIDE / EPIGENETIC MODULATOR</span>
+                        </div>
+                        <div class="px-4 py-1.5 bg-zinc-100 text-zinc-600 rounded-full text-sm font-bold">RESEARCH COMPOUND</div>
+                    </div>
+                    <h1 class="font-display text-6xl font-semibold tracking-tighter">Epithalon</h1>
+                    <p class="mt-4 text-xl text-zinc-600 max-w-2xl">A synthetic tetrapeptide (Ala-Glu-Asp-Gly) studied for its potential effects on telomerase activity, cellular senescence, and epigenetic regulation in research settings.</p>
+                </div>
+                <div class="flex flex-col items-start md:items-end gap-y-2">
+                    <div class="text-sm text-zinc-500">Common Research Doses</div>
+                    <div class="font-mono text-3xl font-semibold text-zinc-900">5 – 10 mg</div>
+                    <div class="text-sm text-zinc-500">Daily or cyclic (SubQ/IM)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-screen-xl mx-auto px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Overview -->
+            <div class="lg:col-span-2 protocol-card bg-white border border-zinc-100 rounded-3xl p-8">
+                <div class="section-header"><i class="fas fa-info-circle text-blue-500"></i><span>OVERVIEW</span></div>
+                <div class="prose prose-zinc max-w-none text-zinc-600">
+                    <p>Epithalon (also known as Epitalon or Epithalamin) is a synthetic tetrapeptide composed of alanine, glutamic acid, aspartic acid, and glycine. It was developed based on research into pineal gland peptides and is studied for its potential effects on telomerase activation and cellular longevity pathways.</p>
+                    <p class="mt-4">Research has explored Epithalon's potential role in modulating gene expression, supporting cellular repair mechanisms, and influencing circadian rhythm regulation. It is an area of active investigation in aging research and cellular senescence studies.</p>
+                </div>
+            </div>
+
+            <!-- Quick Facts -->
+            <div class="protocol-card bg-white border border-zinc-100 rounded-3xl p-8">
+                <div class="section-header"><i class="fas fa-lightbulb text-amber-500"></i><span>QUICK FACTS</span></div>
+                <div class="space-y-4 text-sm">
+                    <div class="flex justify-between"><span class="text-zinc-500">Sequence</span><span class="font-medium">Ala-Glu-Asp-Gly</span></div>
+                    <div class="flex justify-between"><span class="text-zinc-500">Molecular Weight</span><span class="font-medium">~390 Da</span></div>
+                    <div class="flex justify-between"><span class="text-zinc-500">Administration</span><span class="font-medium">SubQ or IM</span></div>
+                    <div class="flex justify-between"><span class="text-zinc-500">Primary Research Focus</span><span class="font-medium">Telomerase / Senescence</span></div>
+                    <div class="flex justify-between"><span class="text-zinc-500">Storage</span><span class="font-medium">2–8°C (reconstituted)</span></div>
+                </div>
+            </div>
+
+            <!-- Research Dosing -->
+            <div class="protocol-card bg-white border border-zinc-100 rounded-3xl p-8">
+                <div class="section-header"><i class="fas fa-syringe text-pink-500"></i><span>RESEARCH DOSING</span></div>
+                <div class="space-y-4">
+                    <div>
+                        <div class="text-xs text-zinc-500 mb-1">STANDARD PROTOCOL</div>
+                        <div class="font-mono text-2xl font-semibold">5 – 10 mg</div>
+                        <div class="text-xs text-zinc-500">Daily for 10–20 days</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-zinc-500 mb-1">CYCLIC APPROACH</div>
+                        <div class="font-mono text-2xl font-semibold">5 mg</div>
+                        <div class="text-xs text-zinc-500">Daily × 10 days, repeat 2–3x/year</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-zinc-500 mb-1">MAINTENANCE</div>
+                        <div class="font-mono text-2xl font-semibold">5 mg</div>
+                        <div class="text-xs text-zinc-500">2–3x per week</div>
+                    </div>
+                </div>
+                <div class="mt-4 text-xs text-amber-600 bg-amber-50 p-3 rounded-xl">Cyclic protocols are commonly studied in research settings for longevity applications.</div>
+            </div>
+
+            <!-- Reconstitution -->
+            <div class="protocol-card bg-white border border-zinc-100 rounded-3xl p-8">
+                <div class="section-header"><i class="fas fa-flask text-purple-500"></i><span>RECONSTITUTION</span></div>
+                <div class="space-y-4 text-sm">
+                    <div>
+                        <div class="font-semibold mb-2">10 mg vial:</div>
+                        <div class="text-zinc-600">Add 2 mL BAC water → <span class="font-mono font-semibold">5 mg/mL</span></div>
+                    </div>
+                    <div>
+                        <div class="font-semibold mb-2">20 mg vial:</div>
+                        <div class="text-zinc-600">Add 4 mL BAC water → <span class="font-mono font-semibold">5 mg/mL</span></div>
+                    </div>
+                    <div class="pt-3 border-t border-zinc-100">
+                        <div class="text-xs text-zinc-500">Example: 5 mg dose = 1 mL (100 units) from 5 mg/mL solution</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Potential Side Effects -->
+            <div class="protocol-card bg-white border border-zinc-100 rounded-3xl p-8">
+                <div class="section-header"><i class="fas fa-exclamation-triangle text-amber-500"></i><span>POTENTIAL SIDE EFFECTS</span></div>
+                <ul class="space-y-2 text-sm text-zinc-600">
+                    <li class="flex gap-2"><i class="fas fa-minus text-xs mt-1.5 text-zinc-400"></i> Injection site reactions (mild)</li>
+                    <li class="flex gap-2"><i class="fas fa-minus text-xs mt-1.5 text-zinc-400"></i> Transient fatigue</li>
+                    <li class="flex gap-2"><i class="fas fa-minus text-xs mt-1.5 text-zinc-400"></i> Sleep pattern changes (reported)</li>
+                    <li class="flex gap-2"><i class="fas fa-minus text-xs mt-1.5 text-zinc-400"></i> Headache (rare)</li>
+                </ul>
+                <div class="mt-4 text-xs text-amber-600 bg-amber-50 p-3 rounded-xl">Epithalon is generally well-tolerated in research settings with minimal reported adverse effects.</div>
+            </div>
+
+            <div class="disclaimer text-xs lg:col-span-3">
+                <div class="font-bold text-red-600 mb-1 flex items-center gap-x-1"><i class="fas fa-exclamation-triangle"></i><span>IMPORTANT DISCLAIMER</span></div>
+                <p class="text-red-700">Epithalon is strictly for research purposes only. Not approved for human use. All research must comply with institutional and regulatory guidelines.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clinical Trials & Research -->
+    <div class="max-w-screen-xl mx-auto px-8 pb-16">
+        <div class="bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-3xl p-10 text-white">
+            <div class="flex items-center gap-x-3 mb-6">
+                <div class="w-10 h-10 bg-pink-500/20 rounded-2xl flex items-center justify-center">
+                    <i class="fas fa-flask text-pink-400 text-xl"></i>
+                </div>
+                <div>
+                    <div class="text-pink-400 text-xs font-bold tracking-[2px]">PUBLISHED RESEARCH</div>
+                    <div class="font-display text-2xl font-semibold tracking-tight">Clinical Trials & Studies</div>
+                </div>
+            </div>
+            
+            <p class="text-zinc-400 max-w-2xl mb-8">Epithalon (Epitalon) has been studied in various research contexts, particularly in relation to telomerase activity, cellular senescence, and potential neuroprotective effects. Below are key publications and resources from peer-reviewed sources.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- PubMed Article -->
+                <a href="https://pubmed.ncbi.nlm.nih.gov/40908429/" target="_blank" class="group block bg-white/5 hover:bg-white/10 border border-white/10 hover:border-pink-500/50 rounded-2xl p-6 transition-all">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-full">PUBMED 2024</div>
+                        <i class="fas fa-external-link-alt text-zinc-500 group-hover:text-pink-400 transition-colors"></i>
+                    </div>
+                    <div class="font-semibold text-lg mb-2">PubMed — Epithalon Research</div>
+                    <div class="text-sm text-zinc-400 mb-4">Recent findings on Epithalon (Ala-Glu-Asp-Gly) and its potential effects on cellular aging pathways and telomerase modulation</div>
+                    <div class="text-xs text-pink-400 font-semibold flex items-center gap-x-1">READ ON PUBMED <i class="fas fa-arrow-right text-xs"></i></div>
+                </a>
+                
+                <!-- MDPI Molecules -->
+                <a href="https://www.mdpi.com/1420-3049/25/3/609" target="_blank" class="group block bg-white/5 hover:bg-white/10 border border-white/10 hover:border-pink-500/50 rounded-2xl p-6 transition-all">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-bold rounded-full">MOLECULES 2020</div>
+                        <i class="fas fa-external-link-alt text-zinc-500 group-hover:text-pink-400 transition-colors"></i>
+                    </div>
+                    <div class="font-semibold text-lg mb-2">Molecules — MDPI</div>
+                    <div class="text-sm text-zinc-400 mb-4">Epitalon and Epithalon: Synthetic tetrapeptides with potential geroprotective properties — A comprehensive review</div>
+                    <div class="text-xs text-pink-400 font-semibold flex items-center gap-x-1">READ FULL ARTICLE <i class="fas fa-arrow-right text-xs"></i></div>
+                </a>
+                
+                <!-- Alzheimer's Drug Discovery Foundation -->
+                <a href="https://www.alzdiscovery.org/uploads/cognitive_vitality_media/Epithalamin-and-Epithalon-Cognitive-Vitality-For-Researchers.pdf" target="_blank" class="group block bg-white/5 hover:bg-white/10 border border-white/10 hover:border-pink-500/50 rounded-2xl p-6 transition-all">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-bold rounded-full">PDF REVIEW</div>
+                        <i class="fas fa-external-link-alt text-zinc-500 group-hover:text-pink-400 transition-colors"></i>
+                    </div>
+                    <div class="font-semibold text-lg mb-2">Alzheimer's Drug Discovery Foundation</div>
+                    <div class="text-sm text-zinc-400 mb-4">Epithalamin and Epithalon: Cognitive Vitality Review — Evidence summary for researchers on potential neuroprotective effects</div>
+                    <div class="text-xs text-pink-400 font-semibold flex items-center gap-x-1">DOWNLOAD PDF <i class="fas fa-arrow-right text-xs"></i></div>
+                </a>
+            </div>
+            
+            <div class="mt-6 text-xs text-zinc-500 flex items-center gap-x-2">
+                <i class="fas fa-info-circle"></i>
+                <span>All links open in new tab. Content is for research and educational purposes only.</span>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-zinc-100 mt-16">
+        <div class="max-w-screen-xl mx-auto px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-y-10">
+                <div>
+                    <div class="flex items-center gap-x-2 mb-4">
+                        <div class="w-7 h-7 bg-gradient-to-br from-pink-500 to-rose-500 rounded-xl flex items-center justify-center"><span class="text-white text-xs font-bold">P</span></div>
+                        <span class="font-display font-semibold tracking-tight">Paragon Peptides</span>
+                    </div>
+                    <p class="text-xs text-zinc-500 max-w-[220px]">Advancing peptide research with precision and integrity.</p>
+                </div>
+                <div><div class="font-semibold text-sm mb-4">Resources</div><div class="space-y-2 text-sm text-zinc-600"><a href="index.html" class="block hover:text-pink-600">Research Protocols</a><a href="peptide-calculator.html" class="block hover:text-pink-600">Peptide Calculator</a><a href="#" class="block hover:text-pink-600">Safety Guidelines</a></div></div>
+                <div><div class="font-semibold text-sm mb-4">Company</div><div class="space-y-2 text-sm text-zinc-600"><a href="#" class="block hover:text-pink-600">About Us</a><a href="#" class="block hover:text-pink-600">Quality Standards</a><a href="#" class="block hover:text-pink-600">Contact</a></div></div>
+                <div class="text-xs text-zinc-500">© 2026 Paragon Peptides<br>All content is for research purposes only.<br>Not intended for human consumption.</div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
