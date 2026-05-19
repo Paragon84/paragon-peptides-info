@@ -4,15 +4,2097 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Peptide Information Center | Paragon Peptides</title>
-    <!-- All your existing styles and head content -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- GSAP + ScrollTrigger for buttery smooth animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .peptide-card {
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .peptide-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        
+        /* Animated Gradient Overlay */
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .animate-\[gradient_8s_ease_infinite\] {
+            background-size: 200% 200%;
+            animation: gradient 8s ease infinite;
+        }
+        
+        /* Parallax Reveal Effect */
+        .parallax-reveal {
+            opacity: 0;
+            transform: translateY(80px) scale(0.95);
+            transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .parallax-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        
+        .parallax-reveal .stagger-item {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Progress Bar */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(to right, #ff1493, #ff69b4);
+            z-index: 9999;
+            transition: width 0.1s ease-out;
+        }
+        
+        /* 3D Tilt Effect */
+        .tilt-card {
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+        }
+        
+        .parallax-reveal.revealed .stagger-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Parallax movement on scroll */
+        .parallax-layer {
+            transition: transform 0.1s ease-out;
+        }
+
+        .modal {
+            animation: modalPop 0.2s ease-out forwards;
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .nav-active {
+            color: #ff1493;
+            font-weight: 600;
+        }
+
+        .section-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .resource-card {
+            transition: all 0.2s ease;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
+        }
+
+        .peptide-tag {
+            font-size: 0.65rem;
+            padding: 0.1rem 0.55rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            letter-spacing: -.5px;
+        }
+
+        .search-input {
+            transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+            box-shadow: 0 0 0 3px rgba(255, 20, 147, 0.1);
+        }
+    </style>
 </head>
-<body>
-    <!-- The full HTML you provided -->
-    <!-- JS with full STACKS_FULL and PEPTIDES data inserted -->
+<body class="bg-zinc-50">
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress" style="width: 0%;"></div>
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-zinc-100 sticky top-0 z-50">
+        <div class="max-w-screen-2xl mx-auto">
+            <div class="px-8 py-5 flex items-center justify-between">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-9 h-9 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center shadow-sm">
+                        <span class="text-white font-bold text-xl">P</span>
+                    </div>
+                    <div>
+                        <span class="font-display text-2xl font-semibold tracking-tighter">Paragon</span>
+                        <span class="font-display text-2xl font-semibold tracking-tighter text-pink-600">Peptides</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <!-- Peptides Dropdown -->
+                    <div class="relative group">
+                        <button class="flex items-center gap-x-1 text-zinc-600 hover:text-zinc-900 transition-colors">
+                            Peptides <i class="fas fa-chevron-down text-xs ml-1"></i>
+                        </button>
+                        <div class="absolute top-full left-0 mt-2 w-64 bg-white border border-zinc-200 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 py-2 text-sm max-h-[400px] overflow-y-auto">
+                            <a href="retatrutide-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Retatrutide</a>
+                            <a href="tirzepatide-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Tirzepatide</a>
+                            <a href="bpc-157-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">BPC-157</a>
+                            <a href="ghk-cu-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">GHK-Cu</a>
+                            <a href="tb-500-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">TB-500</a>
+                            <a href="glow-blend-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Glow Blend</a>
+                            <a href="semax-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Semax</a>
+                            <a href="selank-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Selank</a>
+                            <a href="cerebrolysin-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Cerebrolysin</a>
+                            <a href="aod-9604-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">AOD-9604</a>
+                            <a href="ipamorelin-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Ipamorelin</a>
+                            <a href="tesamorelin-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Tesamorelin</a>
+                            <a href="melanotan-ii-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Melanotan II</a>
+                            <a href="pt-141-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">PT-141</a>
+                            <a href="kisspeptin-10-protocol.html" class="block px-4 py-2 hover:bg-zinc-50">Kisspeptin-10</a>
+                        </div>
+                    </div>
+
+                    <!-- Stacks Dropdown -->
+                    <div class="relative group">
+                        <button class="flex items-center gap-x-1 text-zinc-600 hover:text-zinc-900 transition-colors">
+                            Stacks <i class="fas fa-chevron-down text-xs ml-1"></i>
+                        </button>
+                        <div class="absolute top-full left-0 mt-2 w-72 bg-white border border-zinc-200 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 py-2 text-sm">
+                            <div class="px-4 py-1 text-xs font-bold text-zinc-400">POPULAR COMBINATIONS</div>
+                            <a href="fat-loss-stack.html" class="block px-4 py-2 hover:bg-zinc-50">Fat Loss Stack (Retatrutide + AOD-9604)</a>
+                            <a href="healing-stack.html" class="block px-4 py-2 hover:bg-zinc-50">Healing Stack (BPC-157 + TB-500)</a>
+                            <a href="anti-aging-stack.html" class="block px-4 py-2 hover:bg-zinc-50">Anti-Aging Stack (GHK-Cu + Ipamorelin)</a>
+                            <a href="cognitive-stack.html" class="block px-4 py-2 hover:bg-zinc-50">Cognitive Stack (Semax + Selank)</a>
+                            <a href="recovery-stack.html" class="block px-4 py-2 hover:bg-zinc-50">Recovery Stack (Ipamorelin + TB-500)</a>
+                            <a href="metabolic-stack.html" class="block px-4 py-2 hover:bg-zinc-50">Metabolic Stack (Tesamorelin + Retatrutide)</a>
+                        </div>
+                    </div>
+
+                    <a href="peptide-calculator.html" class="text-zinc-600 hover:text-zinc-900 transition-colors">Calculator</a>
+                    <a href="#" class="text-zinc-600 hover:text-zinc-900 transition-colors">Resources</a>
+                </div>
+                
+                <div class="flex items-center gap-x-3">
+                    <button onclick="showCompareModal()"
+                            class="px-5 py-2.5 text-sm font-semibold rounded-2xl border border-zinc-200 hover:bg-zinc-50 transition-all flex items-center gap-x-2 text-zinc-700">
+                        <i class="fas fa-balance-scale text-pink-500"></i>
+                        <span class="hidden sm:inline">Compare</span>
+                    </button>
+                    
+                    <a href="peptide-calculator.html" 
+                       class="px-5 py-2.5 text-sm font-semibold rounded-2xl bg-zinc-900 text-white hover:bg-black transition-all flex items-center gap-x-2">
+                        <span>Launch Calculator</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero - Full Screen with Overlay (AurumX Style) -->
+    <div class="relative h-screen flex items-center justify-center overflow-hidden">
+        
+        <!-- Background Image with Parallax -->
+        <div class="absolute inset-0 z-0 overflow-hidden">
+            <img 
+                id="hero-bg"
+                src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/hero-image.png" 
+                alt="Paragon Peptides"
+                class="w-full h-full object-cover"
+                style="will-change: transform;"
+            >
+            <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/90"></div>
+        </div>
+        
+        <!-- Hero Content -->
+        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+            <div class="max-w-4xl mx-auto">
+                
+                <div class="inline-flex items-center gap-x-2 px-5 py-2 bg-white/10 backdrop-blur-md border border-white/30 rounded-full text-white text-xs font-bold tracking-[3px] mb-8">
+                    <i class="fas fa-flask"></i>
+                    <span>RESEARCH USE ONLY</span>
+                </div>
+                
+                <h1 class="font-display text-[72px] md:text-[96px] font-semibold tracking-tighter text-white leading-none mb-6">
+                    Precision.<br>Purity.<br>Science.
+                </h1>
+                
+                <p class="text-2xl md:text-3xl text-white/90 max-w-3xl mx-auto leading-tight mb-12">
+                    The complete research hub for serious peptide researchers.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="catalog.html" 
+                       class="px-14 py-5 text-xl font-semibold rounded-3xl bg-white text-zinc-900 hover:bg-zinc-100 transition-all flex items-center gap-x-3 shadow-2xl">
+                        <span>Browse Catalog</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    
+                    <a href="peptide-calculator.html" 
+                       class="px-10 py-5 text-xl font-semibold rounded-3xl border-2 border-white/70 text-white hover:bg-white/10 transition-all flex items-center gap-x-3">
+                        <span>Launch Calculator</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 text-white/50 text-xs tracking-[4px] flex flex-col items-center">
+            <span>SCROLL TO EXPLORE</span>
+            <i class="fas fa-chevron-down mt-3 text-2xl animate-bounce"></i>
+        </div>
+        
+    </div>
+
+    <!-- Why Proper Research Matters -->
+    <div id="why-section" class="bg-white border-b border-zinc-100">
+        <div class="max-w-screen-xl mx-auto px-8 py-16">
+            <div class="text-center mb-12">
+                <div class="text-pink-600 text-xs font-bold tracking-[3px]">THE REALITY CHECK</div>
+                <h2 class="font-display text-5xl font-semibold tracking-tighter text-zinc-900 mt-3">Why Proper Research Matters</h2>
+                <p class="mt-4 text-xl text-zinc-600 max-w-2xl mx-auto">Most dosing errors don’t come from bad peptides — they come from bad information.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-zinc-50 border border-zinc-200 rounded-3xl p-8">
+                    <div class="text-4xl font-display font-bold text-pink-600">73%</div>
+                    <div class="font-semibold mt-4">of users never log doses consistently</div>
+                    <div class="text-sm text-zinc-600 mt-2">Without proper tracking, it’s impossible to know what actually works.</div>
+                </div>
+                <div class="bg-zinc-50 border border-zinc-200 rounded-3xl p-8">
+                    <div class="text-4xl font-display font-bold text-pink-600">1,000×</div>
+                    <div class="font-semibold mt-4">dosing error from confusing mg vs mcg</div>
+                    <div class="text-sm text-zinc-600 mt-2">The most common and dangerous mistake in peptide research.</div>
+                </div>
+                <div class="bg-zinc-50 border border-zinc-200 rounded-3xl p-8">
+                    <div class="text-4xl font-display font-bold text-pink-600">0</div>
+                    <div class="font-semibold mt-4">apps understand your actual protocol</div>
+                    <div class="text-sm text-zinc-600 mt-2">Generic trackers don’t know your dose, frequency, or stack interactions.</div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-10">
+                <p class="text-sm text-zinc-500">That’s why we built this resource hub — so you can research properly before you start.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resource Reveal Section (AurumX Style) -->
+    <div class="bg-zinc-950 text-white py-24 border-t border-white/10">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="max-w-2xl mx-auto text-center mb-16">
+                <div class="text-pink-400 text-xs font-bold tracking-[3px] mb-4">EXPLORE MORE</div>
+                <h2 class="font-display text-5xl font-semibold tracking-tight">Everything you need to research properly.</h2>
+                <p class="mt-4 text-xl text-white/70">Guides, tools, and resources built for serious researchers.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                
+                <!-- Protocols -->
+                <a href="catalog.html" class="group block bg-white/5 border border-white/10 rounded-3xl p-10 hover:bg-white/10 transition-all duration-500">
+                    <div class="w-14 h-14 bg-pink-500/20 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-pink-500/30 transition-colors">
+                        <i class="fas fa-file-medical text-pink-400 text-3xl"></i>
+                    </div>
+                    <div class="font-display text-4xl font-semibold tracking-tight mb-4">Protocols</div>
+                    <div class="text-white/70 text-lg leading-relaxed">Step-by-step guides with exact dosing, reconstitution, and administration for every peptide.</div>
+                    <div class="mt-8 text-pink-400 font-semibold flex items-center gap-x-2 group-hover:gap-x-3 transition-all">
+                        BROWSE PROTOCOLS <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+                
+                <!-- Calculator -->
+                <a href="peptide-calculator.html" class="group block bg-white/5 border border-white/10 rounded-3xl p-10 hover:bg-white/10 transition-all duration-500">
+                    <div class="w-14 h-14 bg-emerald-500/20 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-emerald-500/30 transition-colors">
+                        <i class="fas fa-calculator text-emerald-400 text-3xl"></i>
+                    </div>
+                    <div class="font-display text-4xl font-semibold tracking-tight mb-4">Dose Calculator</div>
+                    <div class="text-white/70 text-lg leading-relaxed">Instant syringe unit calculations for any peptide, vial size, and reconstitution volume.</div>
+                    <div class="mt-8 text-emerald-400 font-semibold flex items-center gap-x-2 group-hover:gap-x-3 transition-all">
+                        LAUNCH CALCULATOR <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+                
+                <!-- Learn -->
+                <a href="beginners-guide-to-peptide-research.html" class="group block bg-white/5 border border-white/10 rounded-3xl p-10 hover:bg-white/10 transition-all duration-500">
+                    <div class="w-14 h-14 bg-violet-500/20 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-violet-500/30 transition-colors">
+                        <i class="fas fa-graduation-cap text-violet-400 text-3xl"></i>
+                    </div>
+                    <div class="font-display text-4xl font-semibold tracking-tight mb-4">Learn</div>
+                    <div class="text-white/70 text-lg leading-relaxed">In-depth guides, safety protocols, and research-backed education for every level.</div>
+                    <div class="mt-8 text-violet-400 font-semibold flex items-center gap-x-2 group-hover:gap-x-3 transition-all">
+                        START LEARNING <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- FEATURED PEPTIDES - Animated Feature Cards (modeled after peptidedosages.com) -->
+    <div class="max-w-screen-2xl mx-auto px-8 py-16 bg-white border-b border-zinc-100">
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center gap-x-2 px-4 py-1 bg-pink-100 text-pink-700 rounded-full text-xs font-bold tracking-widest mb-3">
+                <i class="fas fa-star"></i>
+                <span>FEATURED THIS MONTH</span>
+            </div>
+            <h2 class="font-display text-4xl font-semibold tracking-tight text-zinc-900">Most Researched Peptides</h2>
+            <p class="mt-3 text-lg text-zinc-600 max-w-md mx-auto">Our top 3 peptides based on research volume and clinical interest in 2026.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <!-- Featured Card 1: Retatrutide -->
+            <div class="group relative bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 h-[420px]">
+                <!-- Front: Image + Info -->
+                <div class="absolute inset-0">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Retatrutide" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+                    
+                    <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                        <div class="flex items-center gap-x-2 mb-3">
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur text-xs font-bold rounded-full">GLP-1 / GIP / Glucagon</span>
+                        </div>
+                        <h3 class="font-display text-4xl font-semibold tracking-tight">Retatrutide</h3>
+                        <p class="text-white/80 text-sm mt-1">Triple agonist • Superior weight loss</p>
+                    </div>
+                </div>
+                
+                <!-- Hover Overlay -->
+                <div class="absolute inset-0 bg-black/90 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                    <div class="text-center px-8">
+                        <div class="text-white text-sm font-medium mb-4">RESEARCH PROTOCOL</div>
+                        <a href="retatrutide-protocol.html" 
+                           class="inline-flex items-center gap-x-3 px-8 py-3.5 bg-white text-black font-semibold rounded-2xl hover:bg-pink-600 hover:text-white transition-all text-sm">
+                            <span>VIEW FULL PROTOCOL</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <div class="mt-4 text-xs text-white/60">2 mg → 12 mg weekly escalation</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Card 2: Tirzepatide -->
+            <div class="group relative bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 h-[420px]">
+                <div class="absolute inset-0">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="Tirzepatide" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+                    
+                    <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                        <div class="flex items-center gap-x-2 mb-3">
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur text-xs font-bold rounded-full">GLP-1 / GIP Dual Agonist</span>
+                        </div>
+                        <h3 class="font-display text-4xl font-semibold tracking-tight">Tirzepatide</h3>
+                        <p class="text-white/80 text-sm mt-1">Dual incretin • Up to 20% weight loss</p>
+                    </div>
+                </div>
+                
+                <div class="absolute inset-0 bg-black/90 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                    <div class="text-center px-8">
+                        <div class="text-white text-sm font-medium mb-4">RESEARCH PROTOCOL</div>
+                        <a href="tirzepatide-protocol.html" 
+                           class="inline-flex items-center gap-x-3 px-8 py-3.5 bg-white text-black font-semibold rounded-2xl hover:bg-pink-600 hover:text-white transition-all text-sm">
+                            <span>VIEW FULL PROTOCOL</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <div class="mt-4 text-xs text-white/60">2.5 mg → 15 mg weekly escalation</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Card 3: BPC-157 -->
+            <div class="group relative bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 h-[420px]">
+                <div class="absolute inset-0">
+                    <img src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/cartoon-vial.png" alt="BPC-157" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+                    
+                    <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                        <div class="flex items-center gap-x-2 mb-3">
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur text-xs font-bold rounded-full">Healing Peptide</span>
+                        </div>
+                        <h3 class="font-display text-4xl font-semibold tracking-tight">BPC-157</h3>
+                        <p class="text-white/80 text-sm mt-1">Tissue repair • Gut healing • Anti-inflammatory</p>
+                    </div>
+                </div>
+                
+                <div class="absolute inset-0 bg-black/90 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                    <div class="text-center px-8">
+                        <div class="text-white text-sm font-medium mb-4">RESEARCH PROTOCOL</div>
+                        <a href="bpc-157-protocol.html" 
+                           class="inline-flex items-center gap-x-3 px-8 py-3.5 bg-white text-black font-semibold rounded-2xl hover:bg-pink-600 hover:text-white transition-all text-sm">
+                            <span>VIEW FULL PROTOCOL</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <div class="mt-4 text-xs text-white/60">250–500 mcg daily • 4–6 weeks</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BEGINNERS GUIDES (Exact layout modeled after peptidedosages.com Essential Guides Section) -->
+    <div class="max-w-screen-2xl mx-auto px-8 py-20 bg-white border-b border-zinc-100">
+        <div class="max-w-3xl mx-auto text-center mb-14">
+            <div class="text-pink-600 text-xs font-bold tracking-[3px] mb-4">ESSENTIAL GUIDES</div>
+            <h2 class="font-display text-5xl font-semibold tracking-tight text-zinc-900">Everything you need to get started</h2>
+            <p class="mt-5 text-xl text-zinc-600">Our most important beginner resources — written clearly and updated regularly.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <!-- Essential Guide 1 -->
+            <div class="group bg-white border border-zinc-200 hover:border-pink-300 rounded-3xl p-9 transition-all duration-300 flex flex-col h-full">
+                <div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-500 text-white rounded-2xl flex items-center justify-center mb-8">
+                        <i class="fas fa-book-open text-2xl"></i>
+                    </div>
+                    <h3 class="font-display text-3xl font-semibold tracking-tight leading-tight">The Complete Beginner’s Guide to Peptide Research</h3>
+                    <p class="mt-5 text-[15px] text-zinc-600 leading-relaxed">A step-by-step introduction to peptide research — from basic terminology and safety principles to understanding how different peptides work in the body.</p>
+                </div>
+                <div class="mt-auto pt-8">
+                    <a href="beginners-guide-to-peptide-research.html" class="inline-flex items-center text-sm font-semibold text-pink-600 group-hover:text-pink-700 transition-all">
+                        Read the full guide <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Essential Guide 2 -->
+            <div class="group bg-white border border-zinc-200 hover:border-pink-300 rounded-3xl p-9 transition-all duration-300 flex flex-col h-full">
+                <div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-500 text-white rounded-2xl flex items-center justify-center mb-8">
+                        <i class="fas fa-syringe text-2xl"></i>
+                    </div>
+                    <h3 class="font-display text-3xl font-semibold tracking-tight leading-tight">How to Reconstitute Peptides Safely</h3>
+                    <p class="mt-5 text-[15px] text-zinc-600 leading-relaxed">Detailed instructions on proper reconstitution techniques, choosing the right diluent, storage best practices, and avoiding common contamination risks.</p>
+                </div>
+                <div class="mt-auto pt-8">
+                    <a href="beginners-guide-to-peptide-research.html" class="inline-flex items-center text-sm font-semibold text-pink-600 group-hover:text-pink-700 transition-all">
+                        Read the full guide <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Essential Guide 3 -->
+            <div class="group bg-white border border-zinc-200 hover:border-pink-300 rounded-3xl p-9 transition-all duration-300 flex flex-col h-full">
+                <div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-500 text-white rounded-2xl flex items-center justify-center mb-8">
+                        <i class="fas fa-balance-scale text-2xl"></i>
+                    </div>
+                    <h3 class="font-display text-3xl font-semibold tracking-tight leading-tight">Peptide Dosing & Titration 101</h3>
+                    <p class="mt-5 text-[15px] text-zinc-600 leading-relaxed">Learn how to calculate accurate doses, understand titration schedules, and safely adjust protocols based on research goals and individual response.</p>
+                </div>
+                <div class="mt-auto pt-8">
+                    <a href="beginners-guide-to-peptide-research.html" class="inline-flex items-center text-sm font-semibold text-pink-600 group-hover:text-pink-700 transition-all">
+                        Read the full guide <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WHY OUR GUIDES -->
+    <div class="max-w-screen-2xl mx-auto px-8 py-20">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="text-pink-600 text-xs font-bold tracking-[2px] mb-3">TRUSTED BY RESEARCHERS</div>
+            <h2 class="font-display text-5xl font-semibold tracking-tight text-zinc-900">Why Our Guides Stand Out</h2>
+            <p class="mt-6 text-xl text-zinc-600">Every protocol on Paragon Peptides is built from peer-reviewed studies, tested in real research settings, and continuously updated as new data emerges.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-6xl mx-auto">
+            <div class="text-center">
+                <div class="mx-auto w-16 h-16 bg-pink-100 text-pink-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-microscope text-3xl"></i>
+                </div>
+                <div class="font-semibold text-xl">Peer-Reviewed Sources</div>
+                <div class="mt-3 text-sm text-zinc-600">All dosing, reconstitution, and safety data is sourced directly from published clinical and preclinical studies.</div>
+            </div>
+            <div class="text-center">
+                <div class="mx-auto w-16 h-16 bg-pink-100 text-pink-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-sync-alt text-3xl"></i>
+                </div>
+                <div class="font-semibold text-xl">Continuously Updated</div>
+                <div class="mt-3 text-sm text-zinc-600">Our team monitors new research weekly and updates protocols within 48 hours of significant findings.</div>
+            </div>
+            <div class="text-center">
+                <div class="mx-auto w-16 h-16 bg-pink-100 text-pink-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-shield-alt text-3xl"></i>
+                </div>
+                <div class="font-semibold text-xl">Safety First</div>
+                <div class="mt-3 text-sm text-zinc-600">Every guide includes comprehensive side effect profiles, contraindications, and monitoring recommendations.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- If you're serious about your protocol, this is for you -->
+    <div id="tools-section" class="relative bg-zinc-900 text-white py-20 overflow-hidden">
+        <!-- Background Image with Parallax + Animated Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img 
+                src="https://lydlmgzavepcdtreeoto.supabase.co/storage/v1/object/public/product-images/products/hero-image.png" 
+                alt="Background"
+                class="w-full h-full object-cover opacity-40"
+                style="will-change: transform;"
+            >
+            <div class="absolute inset-0 bg-zinc-900/80"></div>
+            
+            <!-- Animated Gradient Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-pink-500/10 animate-[gradient_8s_ease_infinite]"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-screen-2xl mx-auto px-8">
+            <div class="max-w-3xl mb-12">
+                <div class="text-pink-400 text-xs font-bold tracking-[2px]">BUILT FOR SERIOUS RESEARCHERS</div>
+                <h2 class="font-display text-5xl font-semibold tracking-tight mt-3">If you're serious about your protocol, this is for you</h2>
+                <p class="mt-6 text-lg text-white/70">Everything you need to research, plan, track, and optimize your peptide protocols — all in one place.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- 01 Protocol Builder -->
+                <a href="catalog.html" class="group block bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 hover:border-pink-500/50 transition-all stagger-item">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <div class="text-pink-400 text-xs font-mono font-bold tracking-widest">01</div>
+                            <div class="font-display text-3xl font-semibold mt-4">Protocol Builder</div>
+                            <div class="text-sm text-white/60 mt-3 leading-relaxed">Build custom protocols with exact dosing, frequency, cycle length, and reconstitution math.</div>
+                        </div>
+                        <i class="fas fa-arrow-right text-pink-400 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </a>
+                
+                <!-- 02 Reconstitution Guide -->
+                <a href="how-to-reconstitute-peptides-safely.html" class="group block bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 hover:border-pink-500/50 transition-all stagger-item">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <div class="text-pink-400 text-xs font-mono font-bold tracking-widest">02</div>
+                            <div class="font-display text-3xl font-semibold mt-4">Reconstitution Guide</div>
+                            <div class="text-sm text-white/60 mt-3 leading-relaxed">Step-by-step instructions with exact BAC water volumes and concentration math for every vial size.</div>
+                        </div>
+                        <i class="fas fa-arrow-right text-pink-400 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </a>
+                
+                <!-- 03 Stack Interactions -->
+                <a href="catalog.html" class="group block bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 hover:border-pink-500/50 transition-all stagger-item">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <div class="text-pink-400 text-xs font-mono font-bold tracking-widest">03</div>
+                            <div class="font-display text-3xl font-semibold mt-4">Stack Interactions</div>
+                            <div class="text-sm text-white/60 mt-3 leading-relaxed">Pre-built research stacks with compatibility notes, timing, and synergistic effects.</div>
+                        </div>
+                        <i class="fas fa-arrow-right text-pink-400 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </a>
+                
+                <!-- 04 Dose Calculator -->
+                <a href="peptide-calculator.html" class="group block bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 hover:border-pink-500/50 transition-all stagger-item">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <div class="text-pink-400 text-xs font-mono font-bold tracking-widest">04</div>
+                            <div class="font-display text-3xl font-semibold mt-4">Dose Calculator</div>
+                            <div class="text-sm text-white/60 mt-3 leading-relaxed">Instantly calculate syringe units, concentration, and total doses for any peptide and vial size.</div>
+                        </div>
+                        <i class="fas fa-arrow-right text-pink-400 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </a>
+                
+                <!-- 05 AI Co-Pilot (Placeholder) -->
+                <div class="group block bg-white/5 border border-white/10 rounded-3xl p-8 opacity-60 cursor-not-allowed stagger-item">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <div class="text-pink-400 text-xs font-mono font-bold tracking-widest">05</div>
+                            <div class="font-display text-3xl font-semibold mt-4">AI Co-Pilot <span class="text-xs align-super">(Coming Soon)</span></div>
+                            <div class="text-sm text-white/60 mt-3 leading-relaxed">Ask anything about your protocol. Get context-aware answers on timing, side effects, and escalation.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 06 Dose Logger (Placeholder) -->
+                <div class="group block bg-white/5 border border-white/10 rounded-3xl p-8 opacity-60 cursor-not-allowed stagger-item">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <div class="text-pink-400 text-xs font-mono font-bold tracking-widest">06</div>
+                            <div class="font-display text-3xl font-semibold mt-4">Dose Logger <span class="text-xs align-super">(Coming Soon)</span></div>
+                            <div class="text-sm text-white/60 mt-3 leading-relaxed">Log doses in seconds. Pre-filled from your protocol with site rotation and adherence tracking.</div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="text-center mt-10">
+                <p class="text-xs text-white/40">More tools launching soon: Weekly Insights • Progress Tracking • Side Effect Predictor</p>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Resource Center -->
+    <div class="max-w-screen-2xl mx-auto px-8 pb-16">
+        <div class="bg-white border border-zinc-100 rounded-3xl p-10">
+            <div class="flex items-end justify-between mb-8">
+                <div>
+                    <div class="text-pink-600 text-xs font-bold tracking-widest">EXPLORE MORE</div>
+                    <h3 class="font-display text-3xl font-semibold tracking-tight">Resource Center</h3>
+                </div>
+                <a href="#" class="hidden md:flex items-center text-sm font-medium text-pink-600 hover:text-pink-700">
+                    View all resources <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- Protocols -->
+                <div class="resource-card border border-zinc-100 rounded-2xl p-6 hover:border-pink-200 group">
+                    <div class="w-11 h-11 bg-pink-100 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-pink-200 transition-colors">
+                        <i class="fas fa-file-medical text-pink-600 text-xl"></i>
+                    </div>
+                    <div class="font-semibold text-lg mb-1">Protocols</div>
+                    <div class="text-sm text-zinc-600 mb-4">Step-by-step reconstitution and administration guides for every peptide.</div>
+                    <a href="#" class="text-xs font-semibold text-pink-600 flex items-center gap-x-1 group-hover:gap-x-2 transition-all">
+                        BROWSE PROTOCOLS <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+                
+                <!-- Learn -->
+                <div class="resource-card border border-zinc-100 rounded-2xl p-6 hover:border-pink-200 group">
+                    <div class="w-11 h-11 bg-emerald-100 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-emerald-200 transition-colors">
+                        <i class="fas fa-graduation-cap text-emerald-600 text-xl"></i>
+                    </div>
+                    <div class="font-semibold text-lg mb-1">Learn</div>
+                    <div class="text-sm text-zinc-600 mb-4">In-depth articles on peptide mechanisms, research findings, and safety.</div>
+                    <a href="#" class="text-xs font-semibold text-pink-600 flex items-center gap-x-1 group-hover:gap-x-2 transition-all">
+                        START LEARNING <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+                
+                <!-- Company -->
+                <div class="resource-card border border-zinc-100 rounded-2xl p-6 hover:border-pink-200 group">
+                    <div class="w-11 h-11 bg-amber-100 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-amber-200 transition-colors">
+                        <i class="fas fa-building text-amber-600 text-xl"></i>
+                    </div>
+                    <div class="font-semibold text-lg mb-1">Company</div>
+                    <div class="text-sm text-zinc-600 mb-4">Quality standards, third-party testing, and our commitment to research integrity.</div>
+                    <a href="#" class="text-xs font-semibold text-pink-600 flex items-center gap-x-1 group-hover:gap-x-2 transition-all">
+                        ABOUT PARAGON <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-zinc-900 border-t border-zinc-800">
+        <div class="max-w-screen-2xl mx-auto px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-y-10">
+                <div>
+                    <div class="flex items-center gap-x-2 mb-4">
+                        <div class="w-7 h-7 bg-gradient-to-br from-pink-500 to-rose-500 rounded-xl flex items-center justify-center">
+                            <span class="text-white text-xs font-bold">R</span>
+                        </div>
+                        <span class="font-display font-semibold tracking-tight text-white">Resource Center</span>
+                    </div>
+                    <p class="text-xs text-zinc-400 max-w-[220px]">Comprehensive guides and resources for peptide research excellence.</p>
+                </div>
+                
+                <!-- Protocols -->
+                <div>
+                    <div class="font-semibold text-sm mb-4 text-white">Protocols</div>
+                    <div class="space-y-2 text-sm text-zinc-400">
+                        <a href="catalog.html" class="block hover:text-pink-400 transition-colors">Single Peptides</a>
+                        <a href="catalog.html" class="block hover:text-pink-400 transition-colors">Peptide Blends</a>
+                        <a href="catalog.html" class="block hover:text-pink-400 transition-colors">Peptide Stacks</a>
+                        <a href="peptide-calculator.html" class="block hover:text-pink-400 transition-colors">Dosage Calculator</a>
+                    </div>
+                </div>
+                
+                <!-- Learn -->
+                <div>
+                    <div class="font-semibold text-sm mb-4 text-white">Learn</div>
+                    <div class="space-y-2 text-sm text-zinc-400">
+                        <a href="#" class="block hover:text-pink-400 transition-colors">Blog</a>
+                        <a href="beginners-guide-to-peptide-research.html" class="block hover:text-pink-400 transition-colors">Beginner's Guide</a>
+                        <a href="how-to-reconstitute-peptides-safely.html" class="block hover:text-pink-400 transition-colors">Reconstitution Guide</a>
+                        <a href="#" class="block hover:text-pink-400 transition-colors">Storage Guide</a>
+                        <a href="peptide-dosing-titration-101.html" class="block hover:text-pink-400 transition-colors">Syringe & Measurement Guide</a>
+                        <a href="#" class="block hover:text-pink-400 transition-colors">Glossary</a>
+                        <a href="#" class="block hover:text-pink-400 transition-colors">FAQ</a>
+                    </div>
+                </div>
+                
+                <!-- Company -->
+                <div>
+                    <div class="font-semibold text-sm mb-4 text-white">Company</div>
+                    <div class="space-y-2 text-sm text-zinc-400">
+                        <a href="#" class="block hover:text-pink-400 transition-colors">About Us</a>
+                        <a href="#" class="block hover:text-pink-400 transition-colors">Editorial Policy</a>
+                        <a href="#" class="block hover:text-pink-400 transition-colors">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 pt-8 border-t border-zinc-800 flex flex-col md:flex-row items-center justify-between gap-y-4 text-xs text-zinc-500">
+                <div>© 2026 Paragon Peptides. All rights reserved.</div>
+                <div class="flex items-center gap-x-6">
+                    <a href="#" class="hover:text-pink-400 transition-colors">Twitter</a>
+                    <a href="#" class="hover:text-pink-400 transition-colors">Instagram</a>
+                    <a href="#" class="hover:text-pink-400 transition-colors">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </footer>
+
+    <!-- Peptide Detail Modal -->
+    <div id="peptide-modal" onclick="if (event.target.id === 'peptide-modal') closeModal()" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-zinc-100">
+            
+            <!-- Modal Header -->
+            <div class="px-8 py-6 border-b flex items-center justify-between bg-zinc-50">
+                <div class="flex items-center gap-x-4">
+                    <div id="modal-icon" class="w-12 h-12 rounded-2xl flex items-center justify-center text-white text-2xl font-bold"></div>
+                    <div>
+                        <div id="modal-name" class="font-display text-3xl font-semibold tracking-tight"></div>
+                        <div id="modal-category" class="text-sm text-zinc-500 font-medium"></div>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="w-10 h-10 flex items-center justify-center text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-2xl transition-all">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-8 overflow-y-auto max-h-[calc(90vh-140px)]">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    
+                    <!-- Left: Quick Info -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div>
+                            <div class="text-xs font-bold text-zinc-500 tracking-widest mb-1.5">RESEARCH FOCUS</div>
+                            <div id="modal-focus" class="text-lg font-semibold text-zinc-800"></div>
+                        </div>
+                        
+                        <div>
+                            <div class="text-xs font-bold text-zinc-500 tracking-widest mb-1.5">TYPICAL RESEARCH DOSE</div>
+                            <div id="modal-dose" class="font-mono text-xl font-semibold text-pink-600"></div>
+                        </div>
+                        
+                        <div class="pt-4 border-t">
+                            <div class="flex items-center justify-between text-xs mb-3">
+                                <div class="font-bold text-zinc-500">QUICK ACTIONS</div>
+                            </div>
+                            <div class="space-y-2">
+                                <button onclick="openFullProtocol()" 
+                                        class="w-full flex items-center justify-center gap-x-2 px-4 py-2.5 text-sm font-semibold rounded-2xl border border-pink-200 text-pink-700 hover:bg-pink-50 transition-all">
+                                    <i class="fas fa-file-alt"></i>
+                                    <span id="modal-protocol-btn">View Full Protocol Page</span>
+                                </button>
+                                <button onclick="addToCompareFromModal()" 
+                                        class="w-full flex items-center justify-center gap-x-2 px-4 py-2.5 text-sm font-semibold rounded-2xl border border-zinc-200 hover:bg-zinc-50 transition-all">
+                                    <i class="fas fa-plus"></i>
+                                    <span>Add to Comparison</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Detailed Sections -->
+                    <div class="lg:col-span-3 space-y-8">
+                        
+                        <div>
+                            <div class="section-header flex items-center gap-x-2 mb-3">
+                                <i class="fas fa-info-circle text-pink-500"></i>
+                                <span>Overview</span>
+                            </div>
+                            <div id="modal-overview" class="text-sm text-zinc-600 leading-relaxed"></div>
+                        </div>
+                        
+                        <div>
+                            <div class="section-header flex items-center gap-x-2 mb-3">
+                                <i class="fas fa-star text-pink-500"></i>
+                                <span>Key Research Benefits</span>
+                            </div>
+                            <div id="modal-benefits" class="text-sm text-zinc-600 space-y-1.5"></div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <div class="section-header flex items-center gap-x-2 mb-3">
+                                    <i class="fas fa-flask text-pink-500"></i>
+                                    <span>Reconstitution</span>
+                                </div>
+                                <div id="modal-recon" class="text-sm text-zinc-600"></div>
+                            </div>
+                            
+                            <div>
+                                <div class="section-header flex items-center gap-x-2 mb-3">
+                                    <i class="fas fa-exclamation-triangle text-amber-500"></i>
+                                    <span>Side Effects</span>
+                                </div>
+                                <div id="modal-sides" class="text-sm text-zinc-600"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="px-8 py-4 bg-zinc-50 border-t flex items-center justify-end gap-x-3">
+                <button onclick="closeModal()" class="px-6 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-800">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compare Modal -->
+    <div id="compare-modal" onclick="if (event.target.id === 'compare-modal') closeCompareModal()" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl max-w-[1200px] w-full max-h-[90vh] overflow-hidden shadow-2xl border border-zinc-100">
+            
+            <div class="px-8 py-5 border-b flex items-center justify-between bg-zinc-50">
+                <div class="font-display text-2xl font-semibold tracking-tight">Peptide Comparison</div>
+                <button onclick="closeCompareModal()" class="w-9 h-9 flex items-center justify-center text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="p-8 overflow-auto max-h-[calc(90vh-80px)]">
+                <div id="compare-content" class="overflow-x-auto">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            
+            <div class="px-8 py-4 bg-zinc-50 border-t flex justify-end">
+                <button onclick="closeCompareModal()" class="px-6 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-800">Close Comparison</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const STACKS_FULL = [ /* all 15 stacks here */ ];
-        const PEPTIDES = { /* full peptide object from your file */ };
-        // Updated rendering functions to include stacks and peptides
+        // Tailwind script
+        function initTailwind() {
+            document.documentElement.style.setProperty('--accent', '#ff1493');
+        }
+        
+        // Peptide Data (15 peptides)
+        const peptides = [
+            {
+                id: "retatrutide",
+                name: "Retatrutide",
+                category: "GLP-1 / GIP / Glucagon",
+                tagColor: "emerald",
+                shortDesc: "Triple agonist for advanced metabolic research",
+                focus: "Weight loss • Insulin sensitivity • Energy expenditure",
+                dose: "2–12 mg/week (escalating)",
+                overview: "Retatrutide is a novel triple agonist targeting GLP-1, GIP, and glucagon receptors. It represents the next generation of incretin-based therapeutics with superior weight loss efficacy in research models.",
+                benefits: [
+                    "Superior weight reduction vs dual agonists",
+                    "Significant improvement in glycemic control",
+                    "Increased energy expenditure via glucagon agonism",
+                    "Potential cardiovascular and liver benefits"
+                ],
+                recon: "Add 2–4 mL bacteriostatic water to 10–20 mg vial. Typical concentration: 5–10 mg/mL.",
+                sides: "Nausea, vomiting, diarrhea (dose-dependent). Generally well tolerated with slow titration.",
+                protocolFile: null,
+                icon: "fa-weight"
+            },
+            {
+                id: "tirzepatide",
+                name: "Tirzepatide",
+                category: "GLP-1 / GIP Dual Agonist",
+                tagColor: "emerald",
+                shortDesc: "Dual incretin agonist for metabolic research",
+                focus: "Weight loss • Type 2 diabetes • Appetite regulation",
+                dose: "2.5–15 mg/week (escalating)",
+                overview: "Tirzepatide is a dual GIP and GLP-1 receptor agonist that has demonstrated exceptional efficacy in weight management and glycemic control in clinical research.",
+                benefits: [
+                    "Up to 20%+ body weight reduction in studies",
+                    "Powerful appetite suppression",
+                    "Improved insulin sensitivity",
+                    "Cardiovascular risk reduction"
+                ],
+                recon: "Add 2 mL bacteriostatic water to 10–15 mg vial → 5–7.5 mg/mL concentration.",
+                sides: "Gastrointestinal (nausea, constipation). Usually transient with proper titration.",
+                protocolFile: "tirzepatide-protocol.html",
+                icon: "fa-chart-line"
+            },
+            {
+                id: "bpc-157",
+                name: "BPC-157",
+                category: "Healing Peptide",
+                tagColor: "rose",
+                shortDesc: "Body protection compound for tissue repair",
+                focus: "Gut healing • Tendon/ligament repair • Anti-inflammatory",
+                dose: "250–500 mcg/day",
+                overview: "BPC-157 is a synthetic 15-amino acid peptide derived from a protective protein found in human gastric juice. It has shown remarkable healing properties across multiple tissue types in research.",
+                benefits: [
+                    "Accelerated tendon, ligament & muscle healing",
+                    "Strong gastroprotective and gut-healing effects",
+                    "Anti-inflammatory and cytoprotective",
+                    "Neuroprotective potential"
+                ],
+                recon: "Add 2 mL bacteriostatic water to 5 mg vial → 2.5 mg/mL. Stable for 30+ days refrigerated.",
+                sides: "Excellent safety profile. Very few side effects reported in research.",
+                protocolFile: "bpc-157-protocol.html",
+                icon: "fa-heartbeat"
+            },
+            {
+                id: "ghk-cu",
+                name: "GHK-Cu",
+                category: "Copper Peptide",
+                tagColor: "amber",
+                shortDesc: "Regenerative copper complex for skin & repair",
+                focus: "Skin rejuvenation • Collagen synthesis • Wound healing",
+                dose: "1–2 mg/day (topical or subcutaneous)",
+                overview: "GHK-Cu (glycyl-L-histidyl-L-lysine copper) is a naturally occurring copper complex with potent regenerative, anti-inflammatory, and antioxidant properties. Widely studied for skin health and tissue remodeling.",
+                benefits: [
+                    "Stimulates collagen and elastin production",
+                    "Powerful antioxidant and anti-inflammatory",
+                    "Accelerates wound healing and tissue remodeling",
+                    "Improves skin firmness and reduces fine lines"
+                ],
+                recon: "Add 2 mL bacteriostatic water to 50–100 mg vial. Topical or subcutaneous use.",
+                sides: "Very safe. Rare mild irritation at injection site.",
+                protocolFile: "ghk-cu-protocol.html",
+                icon: "fa-magic"
+            },
+            {
+                id: "tb-500",
+                name: "TB-500",
+                category: "Healing / Recovery",
+                tagColor: "rose",
+                shortDesc: "Thymosin Beta-4 fragment for systemic healing",
+                focus: "Muscle recovery • Flexibility • Injury repair",
+                dose: "2–5 mg/week (loading) then maintenance",
+                overview: "TB-500 is a synthetic version of Thymosin Beta-4, a protein that plays a key role in actin sequestration and cell migration. It promotes healing throughout the body, not just at the injury site.",
+                benefits: [
+                    "Enhanced muscle recovery and repair",
+                    "Improved flexibility and reduced inflammation",
+                    "Promotes angiogenesis and cell migration",
+                    "Systemic healing effects"
+                ],
+                recon: "Add 2–4 mL bacteriostatic water to 5–10 mg vial. Typical concentration 2.5 mg/mL.",
+                sides: "Generally well tolerated. Occasional mild lethargy or headache reported.",
+                protocolFile: "tb-500-protocol.html",
+                icon: "fa-running"
+            },
+            {
+                id: "glow-blend",
+                name: "Glow Blend",
+                category: "Skin / Anti-Aging Blend",
+                tagColor: "amber",
+                shortDesc: "Synergistic blend for skin radiance & repair",
+                focus: "Skin health • Collagen • Anti-aging",
+                dose: "Varies by blend ratio (typically 1–3 mg/day)",
+                overview: "Glow Blend combines GHK-Cu with complementary peptides for enhanced skin rejuvenation, collagen synthesis, and anti-aging effects. Popular in aesthetic and regenerative research.",
+                benefits: [
+                    "Enhanced skin firmness and elasticity",
+                    "Reduction in fine lines and wrinkles",
+                    "Improved skin tone and radiance",
+                    "Synergistic regenerative effects"
+                ],
+                recon: "Follow specific blend instructions. Usually reconstituted with 2–3 mL bacteriostatic water.",
+                sides: "Excellent safety profile. Minimal reported side effects.",
+                protocolFile: "glow-blend-protocol.html",
+                icon: "fa-spa"
+            },
+            {
+                id: "semax",
+                name: "Semax",
+                category: "Nootropic",
+                tagColor: "violet",
+                shortDesc: "Synthetic ACTH analog for cognitive enhancement",
+                focus: "Focus • Memory • Neuroprotection • Stress resilience",
+                dose: "200–600 mcg/day (nasal or subcutaneous)",
+                overview: "Semax is a synthetic heptapeptide analog of ACTH(4-10) with potent nootropic, neuroprotective, and adaptogenic properties. Widely researched in Russia for cognitive enhancement and brain health.",
+                benefits: [
+                    "Improved focus, memory, and mental clarity",
+                    "Neuroprotective and neuroregenerative effects",
+                    "Enhanced stress resilience",
+                    "Potential benefits in neurodegenerative models"
+                ],
+                recon: "Nasal spray or add 2 mL bacteriostatic water for injection. Typical 300 mcg per spray.",
+                sides: "Very safe profile. Rare mild nasal irritation with spray form.",
+                protocolFile: "semax-protocol.html",
+                icon: "fa-brain"
+            },
+            {
+                id: "selank",
+                name: "Selank",
+                category: "Nootropic / Anxiolytic",
+                tagColor: "violet",
+                shortDesc: "Synthetic tuftsin analog for anxiety & cognition",
+                focus: "Anxiety reduction • Cognitive enhancement • Mood",
+                dose: "250–500 mcg/day (nasal or subcutaneous)",
+                overview: "Selank is a synthetic analog of the immunomodulatory peptide tuftsin. It exhibits strong anxiolytic effects without sedation, along with cognitive-enhancing and immunomodulatory properties.",
+                benefits: [
+                    "Significant reduction in anxiety and stress",
+                    "Improved cognitive performance under stress",
+                    "No sedation or dependence",
+                    "Immunomodulatory benefits"
+                ],
+                recon: "Nasal spray preferred. Alternatively, reconstitute 5 mg vial with 2 mL for injection.",
+                sides: "Excellent safety. No significant side effects reported in studies.",
+                protocolFile: "selank-protocol.html",
+                icon: "fa-brain"
+            },
+            {
+                id: "cerebrolysin",
+                name: "Cerebrolysin",
+                category: "Neurotrophic / Nootropic",
+                tagColor: "violet",
+                shortDesc: "Porcine brain-derived neurotrophic peptides",
+                focus: "Brain health • Neurodegeneration • Cognitive recovery",
+                dose: "5–30 mL/day (intravenous or intramuscular)",
+                overview: "Cerebrolysin is a mixture of low-molecular-weight peptides and amino acids derived from porcine brain tissue. It mimics the action of endogenous neurotrophic factors and has been extensively studied for neurodegenerative conditions.",
+                benefits: [
+                    "Neuroprotective and neurotrophic effects",
+                    "Improved cognitive function in research models",
+                    "Potential benefits in stroke and dementia research",
+                    "Supports neuronal survival and plasticity"
+                ],
+                recon: "Ready-to-use solution. No reconstitution needed. Administered IV or IM.",
+                sides: "Generally well tolerated. Occasional dizziness or headache.",
+                protocolFile: "cerebrolysin-protocol.html",
+                icon: "fa-brain"
+            },
+            {
+                id: "aod-9604",
+                name: "AOD-9604",
+                category: "Fat Loss / Metabolic",
+                tagColor: "emerald",
+                shortDesc: "Modified HGH fragment for lipolysis",
+                focus: "Fat metabolism • Lipolysis • Metabolic health",
+                dose: "300–500 mcg/day",
+                overview: "AOD-9604 is a modified fragment of human growth hormone (HGH 177-191) designed to stimulate lipolysis without affecting blood sugar or growth. It is one of the most researched fat-loss peptides.",
+                benefits: [
+                    "Stimulates fat breakdown (lipolysis)",
+                    "Does not affect insulin or glucose levels",
+                    "May support metabolic rate",
+                    "No impact on growth or IGF-1"
+                ],
+                recon: "Add 2 mL bacteriostatic water to 5 mg vial → 2.5 mg/mL concentration.",
+                sides: "Excellent safety profile. Minimal reported side effects.",
+                protocolFile: "aod-9604-protocol.html",
+                icon: "fa-fire"
+            },
+            {
+                id: "ipamorelin",
+                name: "Ipamorelin",
+                category: "GHRP (Growth Hormone)",
+                tagColor: "sky",
+                shortDesc: "Selective growth hormone secretagogue",
+                focus: "Recovery • Sleep • Anti-aging • Body composition",
+                dose: "200–300 mcg 1–3× daily",
+                overview: "Ipamorelin is a highly selective growth hormone releasing peptide (GHRP) that stimulates the pituitary to release GH with minimal side effects. It is one of the cleanest GHRPs available for research.",
+                benefits: [
+                    "Increases natural GH pulses",
+                    "Improved recovery and sleep quality",
+                    "Supports lean mass and fat loss",
+                    "Minimal cortisol or prolactin increase"
+                ],
+                recon: "Add 2 mL bacteriostatic water to 5–10 mg vial. Typical 100–300 mcg per dose.",
+                sides: "Very well tolerated. Rare mild water retention or hunger.",
+                protocolFile: "ipamorelin-protocol.html",
+                icon: "fa-dumbbell"
+            },
+            {
+                id: "tesamorelin",
+                name: "Tesamorelin",
+                category: "GHRH Analog",
+                tagColor: "sky",
+                shortDesc: "Growth hormone releasing hormone analog",
+                focus: "Visceral fat reduction • GH axis • Body composition",
+                dose: "2 mg/day (subcutaneous)",
+                overview: "Tesamorelin is a stabilized analog of Growth Hormone Releasing Hormone (GHRH) that stimulates endogenous GH production. It is particularly noted for its ability to reduce visceral adipose tissue.",
+                benefits: [
+                    "Significant reduction in visceral abdominal fat",
+                    "Increases pulsatile GH and IGF-1",
+                    "Improves body composition",
+                    "Metabolic research applications"
+                ],
+                recon: "Add 2 mL bacteriostatic water to 2 mg vial → 1 mg/mL. Inject at bedtime.",
+                sides: "Generally mild: injection site reactions, joint pain, headache.",
+                protocolFile: "tesamorelin-protocol.html",
+                icon: "fa-user-md"
+            },
+            {
+                id: "melanotan-ii",
+                name: "Melanotan II",
+                category: "Melanocortin Agonist",
+                tagColor: "orange",
+                shortDesc: "Synthetic melanocortin for tanning & libido",
+                focus: "Skin pigmentation • Libido • Appetite regulation",
+                dose: "0.25–1 mg/day (loading) then maintenance",
+                overview: "Melanotan II is a potent synthetic analog of α-MSH that activates melanocortin receptors. It stimulates melanin production, increases libido, and can suppress appetite in research models.",
+                benefits: [
+                    "Rapid skin tanning without excessive UV",
+                    "Significant libido enhancement",
+                    "Appetite suppression in some models",
+                    "Potential photoprotective effects"
+                ],
+                recon: "Add 2 mL bacteriostatic water to 10 mg vial → 5 mg/mL. Start low (0.25 mg).",
+                sides: "Facial flushing, nausea (dose-dependent), increased libido, darkening of freckles.",
+                protocolFile: "melanotan-ii-protocol.html",
+                icon: "fa-sun"
+            },
+            {
+                id: "pt-141",
+                name: "PT-141",
+                category: "Melanocortin Agonist",
+                tagColor: "rose",
+                shortDesc: "Bremelanotide for sexual function research",
+                focus: "Sexual arousal • Libido • Erectile function",
+                dose: "1–1.75 mg as needed (30–60 min prior)",
+                overview: "PT-141 (Bremelanotide) is a selective MC4R agonist derived from Melanotan II. It acts centrally in the brain to enhance sexual arousal and desire, independent of vascular pathways.",
+                benefits: [
+                    "Central stimulation of sexual arousal",
+                    "Effective in both male and female models",
+                    "Rapid onset (30–60 minutes)",
+                    "Does not rely on nitric oxide pathway"
+                ],
+                recon: "Add 2–4 mL bacteriostatic water to 10 mg vial. Typical 1–1.75 mg dose.",
+                sides: "Facial flushing, nausea, headache. Usually mild and transient.",
+                protocolFile: "pt-141-protocol.html",
+                icon: "fa-heart"
+            },
+            {
+                id: "kisspeptin-10",
+                name: "Kisspeptin-10",
+                category: "GnRH Stimulator",
+                tagColor: "emerald",
+                shortDesc: "Endogenous regulator of reproductive axis",
+                focus: "Fertility • Testosterone • HPG axis regulation",
+                dose: "10–100 mcg (pulsatile or bolus)",
+                overview: "Kisspeptin-10 is the most potent endogenous stimulator of GnRH neurons. It plays a critical role in the initiation of puberty and regulation of the hypothalamic-pituitary-gonadal (HPG) axis.",
+                benefits: [
+                    "Stimulates natural GnRH pulses",
+                    "Increases LH, FSH, and testosterone",
+                    "Promising for fertility and hypogonadism research",
+                    "Physiological upstream regulation"
+                ],
+                recon: "Add 2–5 mL bacteriostatic water to 5 mg vial. Typical 10–50 mcg doses.",
+                sides: "Excellent safety profile. Very few side effects reported.",
+                protocolFile: "kisspeptin-10-protocol.html",
+                icon: "fa-dna"
+            }
+        ]
+        
+        let selectedForCompare = []
+        
+        // Render all peptide cards
+        function renderPeptides(filteredPeptides = peptides) {
+            const grid = document.getElementById('peptides-grid')
+            grid.innerHTML = ''
+            
+            filteredPeptides.forEach(peptide => {
+                const isSelected = selectedForCompare.includes(peptide.id)
+                
+                const cardHTML = `
+                    <div class="peptide-card bg-white border border-zinc-200 rounded-3xl p-6 cursor-pointer group" 
+                         onclick="showPeptideModal('${peptide.id}')">
+                        
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-11 h-11 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-2xl flex items-center justify-center text-white">
+                                <i class="fas ${peptide.icon} text-lg"></i>
+                            </div>
+                            
+                            <div class="flex items-center gap-x-2">
+                                <span class="peptide-tag bg-${peptide.tagColor}-100 text-${peptide.tagColor}-700">${peptide.category.split(' / ')[0]}</span>
+                                
+                                <div onclick="event.stopImmediatePropagation(); toggleCompare('${peptide.id}', this)" 
+                                     class="w-7 h-7 flex items-center justify-center rounded-xl border ${isSelected ? 'bg-pink-600 border-pink-600 text-white' : 'border-zinc-200 text-zinc-300 group-hover:text-pink-500 group-hover:border-pink-200'} transition-all">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="font-display text-2xl font-semibold tracking-tight text-zinc-900 mb-1">${peptide.name}</div>
+                        <div class="text-sm text-zinc-500 line-clamp-2 mb-4">${peptide.shortDesc}</div>
+                        
+                        <div class="flex items-center justify-between text-xs">
+                            <div class="font-mono text-pink-600 font-medium">${peptide.dose}</div>
+                            <button onclick="event.stopImmediatePropagation(); showPeptideModal('${peptide.id}')" 
+                                    class="px-3 py-1 text-pink-600 hover:bg-pink-50 rounded-xl font-semibold text-xs flex items-center gap-x-1 transition-all">
+                                VIEW DETAILS <i class="fas fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                `
+                grid.innerHTML += cardHTML
+            })
+        }
+        
+        // Filter peptides by search
+        function filterPeptides() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim()
+            
+            if (!query) {
+                renderPeptides(peptides)
+                return
+            }
+            
+            const filtered = peptides.filter(p => 
+                p.name.toLowerCase().includes(query) || 
+                p.category.toLowerCase().includes(query) || 
+                p.shortDesc.toLowerCase().includes(query) ||
+                p.focus.toLowerCase().includes(query)
+            )
+            
+            renderPeptides(filtered)
+        }
+        
+        // Show peptide detail modal
+        let currentPeptide = null
+        
+        function showPeptideModal(peptideId) {
+            const peptide = peptides.find(p => p.id === peptideId)
+            if (!peptide) return
+            
+            currentPeptide = peptide
+            
+            // Populate modal
+            document.getElementById('modal-icon').innerHTML = `<i class="fas ${peptide.icon}"></i>`
+            document.getElementById('modal-icon').className = `w-12 h-12 rounded-2xl flex items-center justify-center text-white text-2xl font-bold bg-gradient-to-br from-zinc-800 to-zinc-900`
+            
+            document.getElementById('modal-name').innerText = peptide.name
+            document.getElementById('modal-category').innerText = peptide.category
+            document.getElementById('modal-focus').innerText = peptide.focus
+            document.getElementById('modal-dose').innerText = peptide.dose
+            document.getElementById('modal-overview').innerHTML = peptide.overview
+            
+            // Benefits
+            const benefitsHTML = peptide.benefits.map(b => 
+                `<div class="flex items-start gap-x-2"><i class="fas fa-check-circle text-pink-500 mt-1 text-xs"></i> <span>${b}</span></div>`
+            ).join('')
+            document.getElementById('modal-benefits').innerHTML = benefitsHTML
+            
+            document.getElementById('modal-recon').innerHTML = peptide.recon
+            document.getElementById('modal-sides').innerHTML = peptide.sides
+            
+            // Protocol button
+            const protocolBtn = document.getElementById('modal-protocol-btn')
+            if (peptide.protocolFile) {
+                protocolBtn.innerHTML = `View Full Protocol Page <i class="fas fa-external-link-alt ml-1.5 text-xs"></i>`
+                protocolBtn.onclick = () => window.open(peptide.protocolFile, '_blank')
+            } else {
+                protocolBtn.innerHTML = `Full Protocol (Coming Soon)`
+                protocolBtn.onclick = () => alert('Full dedicated protocol page for this peptide will be added shortly.')
+            }
+            
+            // Show modal
+            document.getElementById('peptide-modal').classList.remove('hidden')
+            document.getElementById('peptide-modal').classList.add('flex')
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('peptide-modal')
+            modal.classList.remove('flex')
+            modal.classList.add('hidden')
+        }
+        
+        // Toggle compare selection
+        function toggleCompare(peptideId, element) {
+            event.stopImmediatePropagation()
+            
+            const index = selectedForCompare.indexOf(peptideId)
+            
+            if (index > -1) {
+                selectedForCompare.splice(index, 1)
+                element.classList.remove('bg-pink-600', 'border-pink-600', 'text-white')
+                element.classList.add('border-zinc-200', 'text-zinc-300')
+            } else {
+                if (selectedForCompare.length >= 4) {
+                    alert('You can compare a maximum of 4 peptides at once.')
+                    return
+                }
+                selectedForCompare.push(peptideId)
+                element.classList.add('bg-pink-600', 'border-pink-600', 'text-white')
+                element.classList.remove('border-zinc-200', 'text-zinc-300')
+            }
+            
+            // Update floating compare button if exists (optional enhancement)
+        }
+        
+        function addToCompareFromModal() {
+            if (!currentPeptide) return
+            
+            if (selectedForCompare.length >= 4) {
+                alert('Maximum 4 peptides can be compared.')
+                return
+            }
+            
+            if (!selectedForCompare.includes(currentPeptide.id)) {
+                selectedForCompare.push(currentPeptide.id)
+            }
+            
+            closeModal()
+            
+            // Show toast
+            const toast = document.createElement('div')
+            toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-zinc-900 text-white text-sm px-6 py-3 rounded-3xl shadow-xl flex items-center gap-x-2 z-[200]'
+            toast.innerHTML = `<span>${currentPeptide.name} added to comparison</span>`
+            document.body.appendChild(toast)
+            
+            setTimeout(() => {
+                toast.style.transition = 'all 0.3s ease'
+                toast.style.opacity = '0'
+                toast.style.transform = 'translate(-50%, 20px)'
+                setTimeout(() => toast.remove(), 300)
+            }, 1800)
+        }
+        
+        // Show compare modal
+        function showCompareModal() {
+            if (selectedForCompare.length === 0) {
+                // Auto-select first 3 if none selected
+                selectedForCompare = peptides.slice(0, 3).map(p => p.id)
+            }
+            
+            const modal = document.getElementById('compare-modal')
+            const content = document.getElementById('compare-content')
+            
+            const selectedPeptides = peptides.filter(p => selectedForCompare.includes(p.id))
+            
+            let html = `<div class="grid grid-cols-1 md:grid-cols-${selectedPeptides.length} gap-6">`
+            
+            selectedPeptides.forEach(peptide => {
+                html += `
+                    <div class="border border-zinc-200 rounded-2xl p-6 bg-white">
+                        <div class="flex items-center gap-x-3 mb-4">
+                            <div class="w-9 h-9 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-xl flex items-center justify-center text-white flex-shrink-0">
+                                <i class="fas ${peptide.icon}"></i>
+                            </div>
+                            <div>
+                                <div class="font-display font-semibold text-xl tracking-tight">${peptide.name}</div>
+                                <div class="text-xs text-zinc-500">${peptide.category}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4 text-sm">
+                            <div>
+                                <div class="text-xs font-bold text-zinc-500 mb-1">RESEARCH DOSE</div>
+                                <div class="font-mono text-pink-600">${peptide.dose}</div>
+                            </div>
+                            
+                            <div>
+                                <div class="text-xs font-bold text-zinc-500 mb-1">KEY BENEFIT</div>
+                                <div class="text-zinc-600">${peptide.shortDesc}</div>
+                            </div>
+                            
+                            <div>
+                                <div class="text-xs font-bold text-zinc-500 mb-1">FOCUS AREAS</div>
+                                <div class="text-zinc-600">${peptide.focus}</div>
+                            </div>
+                            
+                            <div>
+                                <div class="text-xs font-bold text-zinc-500 mb-1">SIDE EFFECTS</div>
+                                <div class="text-zinc-600 text-xs">${peptide.sides}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-5 pt-4 border-t">
+                            <button onclick="window.open('${peptide.protocolFile || '#'}', '_blank'); closeCompareModal()" 
+                                    class="w-full text-center text-xs font-semibold py-2 rounded-xl border border-pink-200 text-pink-600 hover:bg-pink-50 transition-all">
+                                ${peptide.protocolFile ? 'OPEN FULL PROTOCOL' : 'PROTOCOL COMING SOON'}
+                            </button>
+                        </div>
+                    </div>
+                `
+            })
+            
+            html += `</div>`
+            
+            content.innerHTML = html
+            modal.classList.remove('hidden')
+            modal.classList.add('flex')
+        }
+        
+        function closeCompareModal() {
+            const modal = document.getElementById('compare-modal')
+            modal.classList.remove('flex')
+            modal.classList.add('hidden')
+        }
+        
+        function openFullProtocol() {
+            if (currentPeptide && currentPeptide.protocolFile) {
+                window.open(currentPeptide.protocolFile, '_blank')
+            } else {
+                alert('Full dedicated protocol page coming soon for this peptide.')
+            }
+        }
+        
+        // Initialize everything
+        function initialize() {
+            initTailwind()
+            renderPeptides()
+            
+            // Keyboard support for search
+            document.getElementById('search-input').addEventListener('keydown', function(e) {
+                if (e.key === '/' && document.activeElement.id !== 'search-input') {
+                    e.preventDefault()
+                    this.focus()
+                }
+            })
+            
+            // Easter egg: press "?" to show random peptide
+            document.addEventListener('keydown', function(e) {
+                if (e.key === '?') {
+                    const random = peptides[Math.floor(Math.random() * peptides.length)]
+                    showPeptideModal(random.id)
+                }
+            })
+            
+            // Initial hint
+            setTimeout(() => {
+                const search = document.getElementById('search-input')
+                if (search) {
+                    search.placeholder = "Search peptides... (try 'BPC' or 'Semax')"
+                }
+            }, 3000)
+            
+            console.log('%c[Paragon Peptides] Information Center initialized with 15 peptides', 'color:#ff1493')
+        }
+        
+        window.onload = initialize
     </script>
+<script>
+    // Smooth scroll animations like AurumX
+    function initScrollAnimations() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section, .resource-card, .peptide-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(40px)';
+            el.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+            observer.observe(el);
+        });
+    }
+    
+    window.onload = function() {
+        initScrollAnimations();
+    };
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+</script>
+<!-- AurumX-Style Bottom Reveal: EXPLORE MORE / Resource Center / Footer -->
+
+<script>
+    // AurumX-style bottom reveal (shows on scroll down, hides on scroll up)
+    function initBottomReveal() {
+        const reveal = document.getElementById('bottom-reveal');
+        let isVisible = false;
+        
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY + window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const nearBottom = scrollPosition > documentHeight - 250;
+            
+            if (nearBottom && !isVisible) {
+                // Show reveal
+                isVisible = true;
+                reveal.style.transform = 'translateY(0)';
+                reveal.style.opacity = '1';
+                
+                setTimeout(() => {
+                    const buttons = reveal.querySelectorAll('a');
+                    buttons.forEach((btn, i) => {
+                        setTimeout(() => {
+                            btn.style.transform = 'translateY(0)';
+                            btn.style.opacity = '1';
+                        }, i * 120);
+                    });
+                }, 350);
+                
+            } else if (!nearBottom && isVisible) {
+                // Hide when scrolling back up
+                isVisible = false;
+                reveal.style.transform = 'translateY(100%)';
+                reveal.style.opacity = '0';
+                
+                const buttons = reveal.querySelectorAll('a');
+                buttons.forEach(btn => {
+                    btn.style.transform = 'translateY(20px)';
+                    btn.style.opacity = '0';
+                });
+            }
+        });
+        
+        // Start hidden
+        reveal.style.transform = 'translateY(100%)';
+        reveal.style.opacity = '0';
+        reveal.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+        
+        const buttons = reveal.querySelectorAll('a');
+        buttons.forEach(btn => {
+            btn.style.transform = 'translateY(20px)';
+            btn.style.opacity = '0';
+            btn.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+        });
+    }
+    
+    setTimeout(() => {
+        initBottomReveal();
+    }, 1500);
+    
+    // Parallax scrolling effect (multiple sections)
+    function initParallax() {
+        const heroBg = document.getElementById('hero-bg');
+        const toolsBg = document.querySelector('#tools-section img');
+        
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            
+            // Hero background parallax
+            if (heroBg) {
+                heroBg.style.transform = `translateY(${scrollY * 0.35}px)`;
+            }
+            
+            // Tools section background parallax (slower)
+            if (toolsBg) {
+                const rect = toolsBg.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    toolsBg.style.transform = `translateY(${(window.innerHeight - rect.top) * 0.15}px)`;
+                }
+            }
+            
+            // Why section parallax (subtle)
+            const whySection = document.getElementById('why-section');
+            if (whySection) {
+                const rect = whySection.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    whySection.style.transform = `translateY(${(window.innerHeight - rect.top) * 0.08}px)`;
+                }
+            }
+            
+            // AurumX-style bottom reveal: Tools section fades, Resource Center reveals
+            const toolsSection = document.getElementById('tools-section');
+            const bottomReveal = document.getElementById('aurumx-bottom-reveal');
+            
+            if (toolsSection && bottomReveal) {
+                const toolsRect = toolsSection.getBoundingClientRect();
+                const scrollProgress = (window.innerHeight - toolsRect.top) / window.innerHeight;
+                
+                if (toolsRect.top < window.innerHeight && toolsRect.bottom > 0) {
+                    // Fade tools section as you scroll up through it
+                    const fadeProgress = Math.max(0, Math.min(1, (window.innerHeight - toolsRect.top) / (window.innerHeight * 0.8)));
+                    toolsSection.style.opacity = `${1 - fadeProgress * 0.8}`;
+                    
+                    // Reveal bottom section
+                    const revealProgress = Math.max(0, Math.min(1, (window.innerHeight - toolsRect.top) / (window.innerHeight * 0.6)));
+                    bottomReveal.style.transform = `translateY(${(1 - revealProgress) * 100}%)`;
+                    bottomReveal.style.opacity = `${revealProgress}`;
+                }
+            }
+        });
+    }
+    
+    // Layered Stacking Effect - Sections stop and stack on top of each other
+    function initStackAnimation() {
+        const sections = document.querySelectorAll('#why-section, #tools-section');
+        
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            const scrollingDown = currentScrollY > lastScrollY;
+            lastScrollY = currentScrollY;
+            
+            sections.forEach((section, index) => {
+                const rect = section.getBoundingClientRect();
+                const nextSection = sections[index + 1];
+                
+                if (nextSection) {
+                    const nextRect = nextSection.getBoundingClientRect();
+                    
+                    // When next section starts entering, current section stops and stacks
+                    if (nextRect.top < window.innerHeight * 0.6 && nextRect.top > 0) {
+                        const progress = (window.innerHeight * 0.6 - nextRect.top) / (window.innerHeight * 0.6);
+                        const clampedProgress = Math.max(0, Math.min(1, progress));
+                        
+                        if (scrollingDown) {
+                            // Stack: current section gets pushed up and scaled
+                            section.style.transition = 'none';
+                            section.style.transform = `translateY(${-clampedProgress * 40}px) scale(${1 - clampedProgress * 0.03})`;
+                            section.style.opacity = `${1 - clampedProgress * 0.2}`;
+                            section.style.zIndex = '5';
+                        } else {
+                            // Unstack: current section returns to normal
+                            section.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                            section.style.transform = 'translateY(0) scale(1)';
+                            section.style.opacity = '1';
+                            section.style.zIndex = '10';
+                        }
+                    }
+                }
+                
+                // Reset when section is fully in view
+                if (rect.top > 0 && rect.top < window.innerHeight * 0.3) {
+                    section.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                    section.style.transform = 'translateY(0) scale(1)';
+                    section.style.opacity = '1';
+                    section.style.zIndex = '10';
+                }
+            });
+        });
+        
+        // Initial state
+        sections.forEach(section => {
+            section.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+        });
+    }
+    
+    // Initialize parallax on load
+    setTimeout(() => {
+        initParallax();
+        initStackAnimation();
+        initParallaxReveal();
+    }, 800);
+    
+    // Parallax Reveal Effect for bottom sections
+    function initParallaxReveal() {
+        const bottomSections = document.querySelectorAll('#tools-section, #aurumx-bottom-reveal');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    const section = entry.target;
+                    
+                    // Add revealed class with slight delay for staggered effect
+                    setTimeout(() => {
+                        section.classList.add('revealed');
+                        
+                        // Trigger staggered items within this section
+                        const staggerItems = section.querySelectorAll('.stagger-item');
+                        staggerItems.forEach((item, i) => {
+                            setTimeout(() => {
+                                item.classList.add('revealed');
+                            }, i * 120);
+                        });
+                    }, index * 200);
+                    
+                    // Add parallax scroll effect
+                    addParallaxScrollEffect(section);
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '-50px 0px -50px 0px'
+        });
+        
+        bottomSections.forEach(section => {
+            section.classList.add('parallax-reveal');
+            observer.observe(section);
+        });
+    }
+    
+    // Add parallax movement on scroll for revealed sections
+    function addParallaxScrollEffect(section) {
+        let ticking = false;
+        
+        const handleScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const rect = section.getBoundingClientRect();
+                    const scrollProgress = (window.innerHeight - rect.top) / window.innerHeight;
+                    
+                    if (scrollProgress > 0 && scrollProgress < 2) {
+                        // Subtle parallax movement
+                        const moveAmount = (scrollProgress - 0.5) * 20;
+                        section.style.transform = `translateY(${moveAmount}px)`;
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+        
+        window.addEventListener('scroll', handleScroll, { passive: true });
+    }
+    
+    // A) Parallax Background on Tools Section
+    function initParallaxBackground() {
+        const toolsSection = document.getElementById('tools-section');
+        const bgImage = toolsSection ? toolsSection.querySelector('img') : null;
+        
+        if (!bgImage) return;
+        
+        window.addEventListener('scroll', () => {
+            const rect = toolsSection.getBoundingClientRect();
+            const scrollProgress = (window.innerHeight - rect.top) / window.innerHeight;
+            
+            if (scrollProgress > 0 && scrollProgress < 2) {
+                // Background moves at 0.5x speed (parallax effect)
+                const parallaxOffset = (scrollProgress - 0.5) * 60;
+                bgImage.style.transform = `translateY(${parallaxOffset}px)`;
+            }
+        }, { passive: true });
+    }
+    
+    // B) 3D Tilt Effect on Cards
+    function init3DTilt() {
+        const tiltCards = document.querySelectorAll('.tilt-card, #tools-section .stagger-item');
+        
+        tiltCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20;
+                const y = ((e.clientY - rect.top) / rect.height - 0.5) * 20;
+                
+                card.style.transform = `perspective(1000px) rotateX(${-y}deg) rotateY(${x}deg) scale(1.02)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'transform 0.1s ease-out';
+                }, 400);
+            });
+        });
+    }
+    
+    // Lenis-Style Smooth Scroll for Entire Layout
+    function initLenisSmoothScroll() {
+        let currentScroll = window.scrollY;
+        let targetScroll = window.scrollY;
+        let isScrolling = false;
+        
+        const ease = (t) => t < 0.5 
+            ? 4 * t * t * t 
+            : 1 - Math.pow(-2 * t + 2, 3) / 2; // Ease out cubic
+        
+        const smoothScroll = () => {
+            if (Math.abs(targetScroll - currentScroll) > 0.5) {
+                currentScroll += (targetScroll - currentScroll) * 0.12; // 0.12 = smoothness factor
+                window.scrollTo(0, currentScroll);
+                requestAnimationFrame(smoothScroll);
+            } else {
+                isScrolling = false;
+            }
+        };
+        
+        // Intercept wheel events for smooth scrolling
+        window.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            
+            const delta = e.deltaY * 1.2; // Scroll speed multiplier
+            targetScroll = Math.max(0, Math.min(
+                targetScroll + delta,
+                document.documentElement.scrollHeight - window.innerHeight
+            ));
+            
+            if (!isScrolling) {
+                isScrolling = true;
+                smoothScroll();
+            }
+        }, { passive: false });
+        
+        // Also handle touch scrolling
+        let touchStartY = 0;
+        window.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        
+        window.addEventListener('touchmove', (e) => {
+            const touchY = e.touches[0].clientY;
+            const delta = (touchStartY - touchY) * 1.5;
+            
+            targetScroll = Math.max(0, Math.min(
+                targetScroll + delta,
+                document.documentElement.scrollHeight - window.innerHeight
+            ));
+            
+            if (!isScrolling) {
+                isScrolling = true;
+                smoothScroll();
+            }
+            
+            touchStartY = touchY;
+        }, { passive: true });
+    }
+    
+    // Footer Fade-In Reveal Animation
+    function initFooterFadeIn() {
+        const footer = document.querySelector('#aurumx-bottom-reveal .border-t');
+        if (!footer) return;
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Fade in the footer
+                    footer.style.transition = 'all 1.2s cubic-bezier(0.4, 0, 0.2, 1)';
+                    footer.style.opacity = '1';
+                    footer.style.transform = 'translateY(0)';
+                    
+                    // Stagger the footer content
+                    const footerContent = footer.querySelectorAll('div');
+                    footerContent.forEach((el, i) => {
+                        el.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+                        el.style.transitionDelay = `${i * 150}ms`;
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+        
+        // Set initial state
+        footer.style.opacity = '0';
+        footer.style.transform = 'translateY(30px)';
+        
+        const footerContent = footer.querySelectorAll('div');
+        footerContent.forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+        });
+        
+        observer.observe(footer);
+    }
+    
+    // E) Advanced Parallax: Multi-Layer + Scroll-Linked Scrub + Horizontal + 3D Perspective
+    function initAdvancedParallax() {
+        const toolsSection = document.getElementById('tools-section');
+        const bottomReveal = document.getElementById('aurumx-bottom-reveal');
+        
+        if (!toolsSection || !bottomReveal) return;
+        
+        const bgImage = toolsSection.querySelector('img');
+        const content = toolsSection.querySelector('.relative');
+        const cards = toolsSection.querySelectorAll('.stagger-item');
+        
+        let ticking = false;
+        
+        const handleAdvancedScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const toolsRect = toolsSection.getBoundingClientRect();
+                    const bottomRect = bottomReveal.getBoundingClientRect();
+                    
+                    // === A) Multi-Layer Parallax ===
+                    const scrollProgress = (window.innerHeight - toolsRect.top) / window.innerHeight;
+                    
+                    if (scrollProgress > 0 && scrollProgress < 2) {
+                        // Background moves at 0.3x speed
+                        if (bgImage) {
+                            bgImage.style.transform = `translateY(${(scrollProgress - 0.5) * 80}px)`;
+                        }
+                        
+                        // Content moves at 0.6x speed (opposite direction for depth)
+                        if (content) {
+                            content.style.transform = `translateY(${(0.5 - scrollProgress) * 40}px)`;
+                        }
+                    }
+                    
+                    // === B) Scroll-Linked Scrub on Cards ===
+                    cards.forEach((card, index) => {
+                        const cardRect = card.getBoundingClientRect();
+                        const cardProgress = (window.innerHeight - cardRect.top) / window.innerHeight;
+                        
+                        if (cardProgress > 0 && cardProgress < 1.5) {
+                            const scale = 0.95 + (cardProgress * 0.05);
+                            const rotate = (cardProgress - 0.5) * 3;
+                            card.style.transform = `scale(${scale}) rotate(${rotate}deg)`;
+                        }
+                    });
+                    
+                    // === C) Horizontal Parallax on Bottom Reveal ===
+                    if (bottomRect.top < window.innerHeight && bottomRect.bottom > 0) {
+                        const horizontalProgress = (window.innerHeight - bottomRect.top) / window.innerHeight;
+                        
+                        const leftElements = bottomReveal.querySelectorAll('a:nth-child(odd)');
+                        const rightElements = bottomReveal.querySelectorAll('a:nth-child(even)');
+                        
+                        leftElements.forEach(el => {
+                            el.style.transform = `translateX(${-horizontalProgress * 30}px)`;
+                        });
+                        
+                        rightElements.forEach(el => {
+                            el.style.transform = `translateX(${horizontalProgress * 30}px)`;
+                        });
+                    }
+                    
+                    // === D) 3D Perspective Parallax ===
+                    cards.forEach((card, index) => {
+                        const cardRect = card.getBoundingClientRect();
+                        const cardCenterY = cardRect.top + cardRect.height / 2;
+                        const viewportCenter = window.innerHeight / 2;
+                        
+                        const distanceFromCenter = (cardCenterY - viewportCenter) / viewportCenter;
+                        
+                        if (Math.abs(distanceFromCenter) < 1.5) {
+                            const perspective = 1000;
+                            const rotateX = distanceFromCenter * -15;
+                            const rotateY = (scrollProgress - 0.5) * 10;
+                            const translateZ = Math.abs(distanceFromCenter) * 20;
+                            
+                            card.style.transform = `
+                                perspective(${perspective}px)
+                                rotateX(${rotateX}deg)
+                                rotateY(${rotateY}deg)
+                                translateZ(${translateZ}px)
+                            `;
+                        }
+                    });
+                    
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+        
+        window.addEventListener('scroll', handleAdvancedScroll, { passive: true });
+        
+        // Add 3D perspective class to cards
+        cards.forEach(card => {
+            card.style.transition = 'transform 0.1s ease-out';
+            card.style.transformStyle = 'preserve-3d';
+        });
+    }
+    // C) Scroll Progress Bar
+    function initScrollProgress() {
+        const progressBar = document.getElementById('scroll-progress');
+        if (!progressBar) return;
+        
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            
+            progressBar.style.width = `${Math.min(scrollPercent, 100)}%`;
+        }, { passive: true });
+    }
+    
+    // GSAP + ScrollTrigger: Buttery Smooth Hidden Bottom Reveal (Uncovering Effect)
+    function initHiddenBottomReveal() {
+        const toolsSection = document.getElementById('tools-section');
+        const bottomReveal = document.getElementById('aurumx-bottom-reveal');
+        
+        if (!toolsSection || !bottomReveal) return;
+        
+        // Register ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Set initial hidden state
+        gsap.set(bottomReveal, {
+            y: '100%',
+            opacity: 0
+        });
+        
+        // Create ScrollTrigger for the "uncovering" effect
+        ScrollTrigger.create({
+            trigger: toolsSection,
+            start: 'top 80%',
+            end: 'bottom 20%',
+            scrub: 1.2, // Smooth scrubbing with 1.2s lag for buttery feel
+            onUpdate: (self) => {
+                const progress = self.progress;
+                
+                // Fade out tools section (uncovering effect)
+                gsap.to(toolsSection, {
+                    opacity: 1 - (progress * 0.85),
+                    duration: 0.1,
+                    ease: 'none',
+                    overwrite: 'auto'
+                });
+                
+                // Slide up and fade in bottom reveal (being uncovered)
+                gsap.to(bottomReveal, {
+                    y: `${(1 - progress) * 100}%`,
+                    opacity: progress,
+                    duration: 0.1,
+                    ease: 'none',
+                    overwrite: 'auto'
+                });
+            }
+        });
+        
+        // Add depth layering effect - cards stagger in as revealed
+        const cards = bottomReveal.querySelectorAll('a, div');
+        ScrollTrigger.create({
+            trigger: bottomReveal,
+            start: 'top 60%',
+            end: 'bottom 40%',
+            scrub: 1,
+            onUpdate: (self) => {
+                cards.forEach((card, i) => {
+                    const cardProgress = Math.max(0, Math.min(1, (self.progress - (i * 0.1)) * 1.5));
+                    gsap.to(card, {
+                        y: (1 - cardProgress) * 30,
+                        opacity: cardProgress,
+                        duration: 0.1,
+                        ease: 'none',
+                        overwrite: 'auto'
+                    });
+                });
+            }
+        });
+        
+        // Refresh ScrollTrigger on resize
+        window.addEventListener('resize', () => {
+            ScrollTrigger.refresh();
+        });
+    }
+    
+    // Initialize all effects
+    setTimeout(() => {
+        initLenisSmoothScroll(); // Lenis-style smooth scroll for entire layout
+        initFooterFadeIn(); // Footer fade-in reveal
+        initParallaxBackground();
+        init3DTilt();
+        initScrollProgress();
+        initAdvancedParallax(); // E) All advanced techniques combined
+        initHiddenBottomReveal(); // Hidden bottom reveal - tools fades, bottom slides up
+    }, 1000);
+</script>
+
+<!-- SVG Templates (Hidden) -->
+<div id="svg-templates" style="position: absolute; overflow: hidden; bottom: 0; left: 0; width: 0; height: 0; z-index: 0; contain: strict" aria-hidden="true">
+<svg viewBox="0 0 30 15" overflow="visible" id="svg751288301_9575"><g><path d="M 3 0 L 6 0 L 6 3 L 3 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 0 L 9 0 L 9 3 L 6 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 3 L 9 3 L 9 6 L 6 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 9 L 12 9 L 12 12 L 9 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 12 L 6 12 L 6 15 L 3 15 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 12 L 9 12 L 9 15 L 6 15 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 3 L 12 3 L 12 6 L 9 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 6 L 12 6 L 12 9 L 9 9 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 6 L 15 6 L 15 9 L 12 9 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 9 L 9 9 L 9 12 L 6 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 0 L 12 0 L 12 3 L 9 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 0 L 15 0 L 15 3 L 12 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 3 L 15 3 L 15 6 L 12 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 9 L 18 9 L 18 12 L 15 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 12 L 12 12 L 12 15 L 9 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 12 L 15 12 L 15 15 L 12 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 3 L 18 3 L 18 6 L 15 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 6 L 18 6 L 18 9 L 15 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 6 L 21 6 L 21 9 L 18 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 9 L 15 9 L 15 12 L 12 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 0 L 18 0 L 18 3 L 15 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 0 L 21 0 L 21 3 L 18 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 3 L 21 3 L 21 6 L 18 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 9 L 24 9 L 24 12 L 21 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 12 L 18 12 L 18 15 L 15 15 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 12 L 21 12 L 21 15 L 18 15 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 3 L 24 3 L 24 6 L 21 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 6 L 24 6 L 24 9 L 21 9 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 6 L 27 6 L 27 9 L 24 9 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 9 L 21 9 L 21 12 L 18 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 0 L 3 0 L 3 3 L 0 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 3 L 3 3 L 3 6 L 0 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 3 L 6 3 L 6 6 L 3 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 6 L 6 6 L 6 9 L 3 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 6 L 9 6 L 9 9 L 6 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 6 L 3 6 L 3 9 L 0 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 9 L 6 9 L 6 12 L 3 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 9 L 3 9 L 3 12 L 0 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 12 L 3 12 L 3 15 L 0 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 0 L 24 0 L 24 3 L 21 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 0 L 27 0 L 27 3 L 24 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 0 L 30 0 L 30 3 L 27 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 3 L 27 3 L 27 6 L 24 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 3 L 30 3 L 30 6 L 27 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 6 L 30 6 L 30 9 L 27 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 9 L 30 9 L 30 12 L 27 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 9 L 27 9 L 27 12 L 24 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 12 L 30 12 L 30 15 L 27 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 12 L 27 12 L 27 15 L 24 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 12 L 24 12 L 24 15 L 21 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path></g></svg>
+<svg viewBox="0 0 151 151" overflow="visible" id="svg872347806_1307"><g><path d="M 75.102 0 L 75.102 151" fill="transparent" stroke-width="17" stroke="var(--token-1273543a-0813-435f-bd61-d8398d80d684, rgb(240, 240, 240))"></path><path d="M 0 0 L 0 151" transform="translate(75 0.102) rotate(90 0.5 75.5)" fill="transparent" stroke-width="17" stroke="var(--token-1273543a-0813-435f-bd61-d8398d80d684, rgb(240, 240, 240))"></path><path d="M 0 0 L 0 151" transform="translate(75.088 0.051) rotate(30 0.5 75.5)" fill="transparent" stroke-width="17" stroke="var(--token-1273543a-0813-435f-bd61-d8398d80d684, rgb(240, 240, 240))"></path><path d="M 0 0 L 0 151" transform="translate(75.051 0.088) rotate(60 0.5 75.5)" fill="transparent" stroke-width="17" stroke="var(--token-1273543a-0813-435f-bd61-d8398d80d684, rgb(240, 240, 240))"></path><path d="M 0 0 L 0 151" transform="translate(74.949 0.088) rotate(120 0.5 75.5)" fill="transparent" stroke-width="17" stroke="var(--token-1273543a-0813-435f-bd61-d8398d80d684, rgb(240, 240, 240))"></path><path d="M 0 0 L 0 151" transform="translate(74.912 0.051) rotate(150 0.5 75.5)" fill="transparent" stroke-width="17" stroke="var(--token-1273543a-0813-435f-bd61-d8398d80d684, rgb(240, 240, 240))"></path></g></svg>
+<svg viewBox="0 0 14 1" overflow="visible" id="svg-1178435119_285"><path d="M 0 0 L 14 0" fill="transparent" stroke="var(--token-1c899963-4323-4f4a-be40-f1a16bdaf0d9, rgba(255, 255, 255, 0.3))" stroke-linejoin="round"></path></svg>
+<svg viewBox="0 0 1 14" overflow="visible" id="svg99321331_285"><path d="M 0 0 L 0 14" fill="transparent" stroke="var(--token-1c899963-4323-4f4a-be40-f1a16bdaf0d9, rgba(255, 255, 255, 0.3))" stroke-linejoin="round"></path></svg>
+<svg viewBox="0 0 38 32" overflow="visible" id="svg706228426_254"><path d="M 19 4 L 35.454 28 L 2.546 28 Z" fill="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path></svg>
+<svg viewBox="0 0 30 15" overflow="visible" id="svg-97695192_9525"><g><path d="M 3 0 L 6 0 L 6 3 L 3 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 0 L 9 0 L 9 3 L 6 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 3 L 9 3 L 9 6 L 6 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 9 L 12 9 L 12 12 L 9 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 12 L 6 12 L 6 15 L 3 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 12 L 9 12 L 9 15 L 6 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 3 L 12 3 L 12 6 L 9 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 6 L 12 6 L 12 9 L 9 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 6 L 15 6 L 15 9 L 12 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 9 L 9 9 L 9 12 L 6 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 0 L 12 0 L 12 3 L 9 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 0 L 15 0 L 15 3 L 12 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 3 L 15 3 L 15 6 L 12 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 9 L 18 9 L 18 12 L 15 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 12 L 12 12 L 12 15 L 9 15 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 12 L 15 12 L 15 15 L 12 15 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 3 L 18 3 L 18 6 L 15 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 6 L 18 6 L 18 9 L 15 9 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 6 L 21 6 L 21 9 L 18 9 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 9 L 15 9 L 15 12 L 12 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 0 L 18 0 L 18 3 L 15 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 0 L 21 0 L 21 3 L 18 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 3 L 21 3 L 21 6 L 18 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 9 L 24 9 L 24 12 L 21 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 12 L 18 12 L 18 15 L 15 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 12 L 21 12 L 21 15 L 18 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 3 L 24 3 L 24 6 L 21 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 6 L 24 6 L 24 9 L 21 9 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 6 L 27 6 L 27 9 L 24 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 9 L 21 9 L 21 12 L 18 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 0 L 3 0 L 3 3 L 0 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 3 L 3 3 L 3 6 L 0 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 3 L 6 3 L 6 6 L 3 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 6 L 6 6 L 6 9 L 3 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 6 L 9 6 L 9 9 L 6 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 6 L 3 6 L 3 9 L 0 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 9 L 6 9 L 6 12 L 3 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 9 L 3 9 L 3 12 L 0 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 12 L 3 12 L 3 15 L 0 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 0 L 24 0 L 24 3 L 21 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 0 L 27 0 L 27 3 L 24 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 0 L 30 0 L 30 3 L 27 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 3 L 27 3 L 27 6 L 24 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 3 L 30 3 L 30 6 L 27 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 6 L 30 6 L 30 9 L 27 9 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 9 L 30 9 L 30 12 L 27 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 9 L 27 9 L 27 12 L 24 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 12 L 30 12 L 30 15 L 27 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 12 L 27 12 L 27 15 L 24 15 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 12 L 24 12 L 24 15 L 21 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path></g></svg>
+<svg viewBox="0 0 30 15" overflow="visible" id="svg-904116403_9275"><g><path d="M 3 0 L 6 0 L 6 3 L 3 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 0 L 9 0 L 9 3 L 6 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 3 L 9 3 L 9 6 L 6 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 9 L 12 9 L 12 12 L 9 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 12 L 6 12 L 6 15 L 3 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 12 L 9 12 L 9 15 L 6 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 3 L 12 3 L 12 6 L 9 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 6 L 12 6 L 12 9 L 9 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 6 L 15 6 L 15 9 L 12 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 9 L 9 9 L 9 12 L 6 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 0 L 12 0 L 12 3 L 9 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 0 L 15 0 L 15 3 L 12 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 3 L 15 3 L 15 6 L 12 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 9 L 18 9 L 18 12 L 15 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 12 L 12 12 L 12 15 L 9 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 12 L 15 12 L 15 15 L 12 15 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 3 L 18 3 L 18 6 L 15 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 6 L 18 6 L 18 9 L 15 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 6 L 21 6 L 21 9 L 18 9 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 9 L 15 9 L 15 12 L 12 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 0 L 18 0 L 18 3 L 15 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 0 L 21 0 L 21 3 L 18 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 3 L 21 3 L 21 6 L 18 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 9 L 24 9 L 24 12 L 21 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 12 L 18 12 L 18 15 L 15 15 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 12 L 21 12 L 21 15 L 18 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 3 L 24 3 L 24 6 L 21 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 6 L 24 6 L 24 9 L 21 9 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 6 L 27 6 L 27 9 L 24 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 9 L 21 9 L 21 12 L 18 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 0 L 3 0 L 3 3 L 0 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 3 L 3 3 L 3 6 L 0 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 3 L 6 3 L 6 6 L 3 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 6 L 6 6 L 6 9 L 3 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 6 L 9 6 L 9 9 L 6 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 6 L 3 6 L 3 9 L 0 9 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 9 L 6 9 L 6 12 L 3 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 9 L 3 9 L 3 12 L 0 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 12 L 3 12 L 3 15 L 0 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 0 L 24 0 L 24 3 L 21 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 0 L 27 0 L 27 3 L 24 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 0 L 30 0 L 30 3 L 27 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 3 L 27 3 L 27 6 L 24 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 3 L 30 3 L 30 6 L 27 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 6 L 30 6 L 30 9 L 27 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 9 L 30 9 L 30 12 L 27 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 9 L 27 9 L 27 12 L 24 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 12 L 30 12 L 30 15 L 27 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 12 L 27 12 L 27 15 L 24 15 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 12 L 24 12 L 24 15 L 21 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path></g></svg>
+<svg viewBox="0 0 30 15" overflow="visible" id="svg712345167_9075"><g><path d="M 3 0 L 6 0 L 6 3 L 3 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 0 L 9 0 L 9 3 L 6 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 3 L 9 3 L 9 6 L 6 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 9 L 12 9 L 12 12 L 9 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 12 L 6 12 L 6 15 L 3 15 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 12 L 9 12 L 9 15 L 6 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 3 L 12 3 L 12 6 L 9 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 6 L 12 6 L 12 9 L 9 9 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 6 L 15 6 L 15 9 L 12 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 9 L 9 9 L 9 12 L 6 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 0 L 12 0 L 12 3 L 9 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 0 L 15 0 L 15 3 L 12 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 3 L 15 3 L 15 6 L 12 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 9 L 18 9 L 18 12 L 15 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 12 L 12 12 L 12 15 L 9 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 12 L 15 12 L 15 15 L 12 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 3 L 18 3 L 18 6 L 15 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 6 L 18 6 L 18 9 L 15 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 6 L 21 6 L 21 9 L 18 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 9 L 15 9 L 15 12 L 12 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 0 L 18 0 L 18 3 L 15 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 0 L 21 0 L 21 3 L 18 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 3 L 21 3 L 21 6 L 18 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 9 L 24 9 L 24 12 L 21 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 12 L 18 12 L 18 15 L 15 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 12 L 21 12 L 21 15 L 18 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 3 L 24 3 L 24 6 L 21 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 6 L 24 6 L 24 9 L 21 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 6 L 27 6 L 27 9 L 24 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 9 L 21 9 L 21 12 L 18 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 0 L 3 0 L 3 3 L 0 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 3 L 3 3 L 3 6 L 0 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 3 L 6 3 L 6 6 L 3 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 6 L 6 6 L 6 9 L 3 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 6 L 9 6 L 9 9 L 6 9 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 6 L 3 6 L 3 9 L 0 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 9 L 6 9 L 6 12 L 3 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 9 L 3 9 L 3 12 L 0 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 12 L 3 12 L 3 15 L 0 15 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 0 L 24 0 L 24 3 L 21 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 0 L 27 0 L 27 3 L 24 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 0 L 30 0 L 30 3 L 27 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 3 L 27 3 L 27 6 L 24 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 3 L 30 3 L 30 6 L 27 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 6 L 30 6 L 30 9 L 27 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 9 L 30 9 L 30 12 L 27 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 9 L 27 9 L 27 12 L 24 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 12 L 30 12 L 30 15 L 27 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 12 L 27 12 L 27 15 L 24 15 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 12 L 24 12 L 24 15 L 21 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path></g></svg>
+<svg viewBox="0 0 30 15" overflow="visible" id="svg1005943501_9075"><g><path d="M 3 0 L 6 0 L 6 3 L 3 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 0 L 9 0 L 9 3 L 6 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 3 L 9 3 L 9 6 L 6 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 9 L 12 9 L 12 12 L 9 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 12 L 6 12 L 6 15 L 3 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 12 L 9 12 L 9 15 L 6 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 3 L 12 3 L 12 6 L 9 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 6 L 12 6 L 12 9 L 9 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 6 L 15 6 L 15 9 L 12 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 9 L 9 9 L 9 12 L 6 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 0 L 12 0 L 12 3 L 9 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 0 L 15 0 L 15 3 L 12 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 3 L 15 3 L 15 6 L 12 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 9 L 18 9 L 18 12 L 15 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 9 12 L 12 12 L 12 15 L 9 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 12 L 15 12 L 15 15 L 12 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 3 L 18 3 L 18 6 L 15 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 6 L 18 6 L 18 9 L 15 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 6 L 21 6 L 21 9 L 18 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 12 9 L 15 9 L 15 12 L 12 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 0 L 18 0 L 18 3 L 15 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 0 L 21 0 L 21 3 L 18 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 3 L 21 3 L 21 6 L 18 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 9 L 24 9 L 24 12 L 21 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 15 12 L 18 12 L 18 15 L 15 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 12 L 21 12 L 21 15 L 18 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 3 L 24 3 L 24 6 L 21 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 6 L 24 6 L 24 9 L 21 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 6 L 27 6 L 27 9 L 24 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 18 9 L 21 9 L 21 12 L 18 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 0 L 3 0 L 3 3 L 0 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 3 L 3 3 L 3 6 L 0 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 3 L 6 3 L 6 6 L 3 6 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 6 L 6 6 L 6 9 L 3 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 6 6 L 9 6 L 9 9 L 6 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 6 L 3 6 L 3 9 L 0 9 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 3 9 L 6 9 L 6 12 L 3 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 9 L 3 9 L 3 12 L 0 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 0 12 L 3 12 L 3 15 L 0 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 0 L 24 0 L 24 3 L 21 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 0 L 27 0 L 27 3 L 24 3 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 0 L 30 0 L 30 3 L 27 3 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 3 L 27 3 L 27 6 L 24 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 3 L 30 3 L 30 6 L 27 6 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 6 L 30 6 L 30 9 L 27 9 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 9 L 30 9 L 30 12 L 27 12 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 9 L 27 9 L 27 12 L 24 12 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 27 12 L 30 12 L 30 15 L 27 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 24 12 L 27 12 L 27 15 L 24 15 Z" fill="var(--token-2ddcea38-bb42-4986-8e36-4a45eb0c9596, rgb(31, 31, 31))" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path><path d="M 21 12 L 24 12 L 24 15 L 21 15 Z" fill="rgba(0, 0, 0, 0)" stroke-width="0.2" stroke="var(--token-7bbf4f4d-a8fb-4fe0-a164-a8cf2fd0048a, rgb(255, 255, 255))"></path></g></svg>
+</div>
 </body>
 </html>
